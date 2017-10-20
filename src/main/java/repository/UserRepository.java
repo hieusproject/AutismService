@@ -229,18 +229,7 @@ public class UserRepository implements RepositoryInterface{
     }
      
     public static void main(String[] args) throws ParseException {
-        String dateStr="05/05/1994";
-        SimpleDateFormat format= new SimpleDateFormat("mm/dd/yyyy");
-        java.util.Date date= format.parse(dateStr);
-        java.util.Date currentDate= new java.util.Date();
-        User user= new User(1, "admin", "admin",
-                "Lê Văn Hậu", "QN", "0976679753","adcm.edu@gmail",
-                DataUtil.toSQLDATE(date), DataUtil.toSQLDATE(currentDate), 0);
-        UserRepository uRepository= new UserRepository();
-////        System.out.println(uRepository.getAll());
-//        User us= uRepository.getUserByInput("user01","aad415a73c4cef1ef94a5c00b2642b571a3e5494536328ad960db61889bd9368");
-//        System.out.println(us.getFullname());
-        boolean us=uRepository.update(user);
-        System.out.println("update: "+us);
+        UserRepository repository= new UserRepository();
+        System.out.println(repository.getAll().size());
     }
 }

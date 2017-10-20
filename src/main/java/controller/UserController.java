@@ -41,6 +41,9 @@ import repository.UserRepository;
 import DataUtil.DataUtil;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Context;
 import org.json.simple.JSONObject;
 
 /**
@@ -75,9 +78,13 @@ public class UserController {
     
     
     @RequestMapping(value = "/getUsers",method = RequestMethod.GET)
-    public ArrayList <Object> getAllUser(){
+    public Map getAllUser(@Context HttpServletRequest request,@Context HttpServletResponse respone ){
+            Map response= new HashMap();
             ArrayList<Object> users= userRepository.getAll();
-            return users;
+            String contextpath= request.getServletContext().getRealPath("/files");
+            response.put("contextPath",contextpath);
+            response.put("users", users);
+            return response;
     }
 
     @RequestMapping(value = "/register",method = RequestMethod.POST)

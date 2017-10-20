@@ -7,6 +7,7 @@ package controller;
 
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
+import entity.Child;
 import entity.Token;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,22 +25,34 @@ import javax.ws.rs.core.Response;
 import repository.ChildChildRepository;
 import repository.ExtraInfoRepository;
 import repository.TokenRepository;
-
+import DataUtil.DataUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import entity.ExtraInfo;
+import java.text.ParseException;
+import java.util.Date;
+import org.json.simple.JSONObject;
+import repository.ChildRepository;
 /**
  *
  * @author AnNguyen
  */
 @Path("/file")
 public class UploadService {
-    String root= "C:\\Users\\AnNguyen\\Documents\\NetBeansProjects"
-                        + "\\Diagnosis_services\\src\\main\\webapp\\files\\";
+    String root= "G:\\NetBeansProjects\\Diagnosis_services\\src\\main\\webapp\\images\\";
     TokenRepository tokenRepository=new TokenRepository();
-    ChildChildRepository childRepository = new ChildChildRepository();
+    ChildRepository childRepository = new ChildRepository();
     ExtraInfoRepository extraInfoRepository= new ExtraInfoRepository();
-    @POST
+    
+    
+    
+   
     @Path("/newChild")
+    @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Map uploadFile(
+    public Response uploadFile(
+           
 		@FormDataParam ("file") InputStream uploadedInputStream,
 		@FormDataParam ("file") FormDataContentDisposition fileDetail,
                 @FormDataParam ("token") String token,
@@ -51,25 +64,49 @@ public class UploadService {
                 @FormDataParam ("mother_career") String mother_career,
                 @FormDataParam ("monthly_income") String monthly_income,
                 @FormDataParam ("child_sex") String child_sex
-                                    ) {
-                Map respone = new HashMap();
+                                    ) throws ParseException, JsonProcessingException, IOException {
+                JSONObject respone = new JSONObject();
                 Token tokenOb = tokenRepository.getTokenByCode(token);
                 String uploadedFileLocation = root+ fileDetail.getFileName();
-                String fileName= fileDetail.getFileName();
-                if (token==null) {
+                String imgUrl= "/images/"+ fileDetail.getFileName();
+                if (tokenOb==null) {
                     respone.put("status","0");
                 } else {
+                    Date dateCreated=new Date();
+                    Date birthDate= DataUtil.StringtoDate(date_of_birth);
                     writeToFile(uploadedInputStream, uploadedFileLocation);
+                    Child child= new Child(0,tokenOb.getU_id() ,
+                            fullname, DataUtil.toSQLDATE(birthDate), father,
+                            mother,DataUtil.toSQLDATE(dateCreated),0 , imgUrl);
+                    int new_c_id=childRepository.newAndreturnId(child);
+                    int father_career_id= Integer.parseInt(father_career);
+                    int mother_career_id= Integer.parseInt(mother_career);
+                    int monthly_income_int= Integer.parseInt(monthly_income);
+                    int child_sex_int = Integer.parseInt(child_sex);
+                    
+                    ExtraInfo extraInfor= new ExtraInfo(new_c_id, father_career_id, 0,
+                            mother_career_id, monthly_income_int,
+                            0, 0, child_sex_int, 0);
+                    extraInfoRepository.save(extraInfor);
+                    child.setC_id(new_c_id);
+                    JSONObject json= new JSONObject();
+                            json.put("c_id", new_c_id);
+                            json.put("u_id", tokenOb.getU_id());
+                            json.put("fullname", fullname);
+                            json.put("date_of_birth", DataUtil.toSQLDATE(birthDate));
+                            json.put("child_sex", child_sex);
+                            json.put("imgUrl", imgUrl);
+                    respone.put("status","1");
+                    respone.put("child", json);
                     
                 }
+              
+                uploadedInputStream.close();
+		return Response.status(200)
+				.entity(respone.toString()).build();
 		
 
-		// save it
-		
                 
-		
-
-                return null;
 	}
 
 	// save uploaded file to new location
@@ -77,16 +114,15 @@ public class UploadService {
 		String uploadedFileLocation) {
 
 		try {
-			OutputStream out = new FileOutputStream(new File(
-					uploadedFileLocation));
 			int read = 0;
 			byte[] bytes = new byte[1024];
 
-			out = new FileOutputStream(new File(uploadedFileLocation));
+			OutputStream out = new FileOutputStream(new File(uploadedFileLocation));
 			while ((read = uploadedInputStream.read(bytes)) != -1) {
 				out.write(bytes, 0, read);
 			}
 			out.flush();
+                        
 			out.close();
 		} catch (IOException e) {
 

@@ -45,7 +45,7 @@ public class CareerTypeRepository implements RepositoryInterface{
                    + " ( `carrer_title`, `career_description`)"
                    + " VALUES (?,?)";
            PreparedStatement insertStatement= connection.prepareStatement(sqlString);
-           insertStatement.setString(1,ct.getCarrer_title());
+           insertStatement.setString(1,ct.getCareer_title());
            insertStatement.setString(2, ct.getCareer_description());
           
            int result=insertStatement.executeUpdate();
@@ -73,9 +73,9 @@ public class CareerTypeRepository implements RepositoryInterface{
                    + " `carrer_title`=?, `career_description`=?"
                    + " WHERE `caree_id`=?";
            PreparedStatement updateStatement= connection.prepareStatement(sqlString);
-           updateStatement.setString(1,carrers.getCarrer_title());
+           updateStatement.setString(1,carrers.getCareer_title());
            updateStatement.setString(2,carrers.getCareer_description());
-           updateStatement.setInt(3, carrers.getCaree_id());
+           updateStatement.setInt(3, carrers.getCareer_id());
            
            int result=updateStatement.executeUpdate();
           
@@ -98,7 +98,9 @@ public class CareerTypeRepository implements RepositoryInterface{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     public static void main(String[] args) {
-        int size=new  CareerTypeRepository().getAll().size();
+        CareerTypeRepository careerTypeRepository= new CareerTypeRepository();
+        int size=careerTypeRepository.getAll().size();
+        
         System.out.println(size);
     }
 }

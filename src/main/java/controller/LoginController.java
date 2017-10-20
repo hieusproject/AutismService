@@ -19,11 +19,12 @@ import DataUtil.PassWordUtil;
 import repository.TokenRepository;
 import repository.UserRepository;
 
-
 @RestController
 public class LoginController {
    static UserRepository userRepository= new UserRepository();
    static  TokenRepository tokenRepository= new TokenRepository();
+   
+   
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public Map getUserByInput(@RequestParam(name="username") String username,
                                 @RequestParam(name="password") String password) throws NoSuchAlgorithmException{
@@ -61,4 +62,7 @@ public class LoginController {
         }
     return respone;
     }
+  
+   
 }
+    

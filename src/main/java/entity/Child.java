@@ -18,21 +18,20 @@ public class Child {
     private Date date_of_birth;
     private String father_name;
     private String mother_name;
-    private int extra_infor_id;
     private Date date_created;
     private int deleted;
     private String image_url;
     public Child() {
     }
 
-    public Child(int c_id, int u_id, String fullName, Date date_of_birth, String father_name, String mother_name, int extra_infor_id, Date date_created, int deleted, String image_url) {
+    public Child(int c_id, int u_id, String fullName, Date date_of_birth, String father_name, String mother_name, Date date_created, int deleted, String image_url) {
         this.c_id = c_id;
         this.u_id = u_id;
         this.fullName = fullName;
         this.date_of_birth = date_of_birth;
         this.father_name = father_name;
         this.mother_name = mother_name;
-        this.extra_infor_id = extra_infor_id;
+   
         this.date_created = date_created;
         this.deleted = deleted;
         this.image_url = image_url;
@@ -84,14 +83,6 @@ public class Child {
 
     public void setMother_name(String mother_name) {
         this.mother_name = mother_name;
-    }
-
-    public int getExtra_infor_id() {
-        return extra_infor_id;
-    }
-
-    public void setExtra_infor_id(int extra_infor_id) {
-        this.extra_infor_id = extra_infor_id;
     }
 
     public Date getDate_created() {

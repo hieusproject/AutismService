@@ -10,36 +10,42 @@ package entity;
  * @author VanHau
  */
 public class CareerType {
-    private int caree_id;
-    private String carrer_title,career_description;
+    private int career_id;
+    private String career_title,career_description;
 
-    public CareerType(int caree_id, String carrer_title, String career_description) {
-        this.caree_id = caree_id;
-        this.carrer_title = carrer_title;
+    public CareerType() {
+    }
+
+    public CareerType(int career_id, String career_title, String career_description) {
+        this.career_id = career_id;
+        this.career_title = career_title;
         this.career_description = career_description;
     }
 
-    public void setCaree_id(int caree_id) {
-        this.caree_id = caree_id;
+    public int getCareer_id() {
+        return career_id;
     }
 
-    public void setCarrer_title(String carrer_title) {
-        this.carrer_title = carrer_title;
+    public void setCareer_id(int career_id) {
+        this.career_id = career_id;
+    }
+
+    public String getCareer_title() {
+        return career_title;
+    }
+
+    public void setCareer_title(String career_title) {
+        this.career_title = career_title;
+    }
+
+    public String getCareer_description() {
+        return career_description;
     }
 
     public void setCareer_description(String career_description) {
         this.career_description = career_description;
     }
 
-    public int getCaree_id() {
-        return caree_id;
-    }
-
-    public String getCarrer_title() {
-        return carrer_title;
-    }
-
-    public String getCareer_description() {
-        return career_description;
-    }
+    
+   
 }
