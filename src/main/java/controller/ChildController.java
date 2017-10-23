@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -15,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,17 +47,27 @@ import repository.TokenRepository;
  */
 @RestController
 public class ChildController {
-    String root= "G:\\NetBeansProjects\\Diagnosis_services\\src\\main\\webapp\\images";
     TokenRepository tokenRepository=new TokenRepository();
     ChildRepository childRepository = new ChildRepository();
     ExtraInfoRepository extraInfoRepository= new ExtraInfoRepository();
+    String resouce="";
+   
+    public ChildController() throws UnsupportedEncodingException {
+        String path =  this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+        String fullPath = URLDecoder.decode(path, "UTF-8");
+        String pathArr[] = fullPath.split("/target/");
+        resouce = pathArr[0]+"/src/main/webapp/images";    
+    }
+    
 @RequestMapping(value = "newchild",method = RequestMethod.POST)     
 public Map newChild(
         @Context HttpServletRequest httpRequest,
         @Context HttpServletRequest httpRespone
                         ) throws ParseException, IOException{
      ServletContext  servletContext= httpRequest.getServletContext();
+   
      Map respone = new HashMap();
+            
      MultipartResolver resolver= new CommonsMultipartResolver(servletContext);
             MultipartHttpServletRequest multipartResquest= resolver.resolveMultipart(httpRequest);
             MultipartFile file= multipartResquest.getFile("file");
@@ -91,6 +104,7 @@ public Map newChild(
                             0, 0, child_sex_int, 0);
                     extraInfoRepository.save(extraInfor);
                     child.setC_id(new_c_id);
+                    respone.put("testpath",resouce);
                     respone.put("status","1");
                     respone.put("child", child);
                     writeTofile(file, fileName);
@@ -104,7 +118,7 @@ public Map newChild(
     public void writeTofile(MultipartFile filePart,String filename) throws IOException{
             OutputStream out = null;
             InputStream filecontent = null;
-            out = new FileOutputStream(new File(root + File.separator
+            out = new FileOutputStream(new File(resouce + File.separator
                 + filename));
             filecontent = filePart.getInputStream();
 
