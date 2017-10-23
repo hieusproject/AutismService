@@ -42,18 +42,18 @@ public class ExtraInfoRepository implements RepositoryInterface{
      public boolean save(Object ob) {
         try {
             ExtraInfo exif= (ExtraInfo) ob;
-             String sqlString= "INSERT INTO `extra_info` (`father_career_id`,`divorce_status`,"
-                     + "`mother_career_id`,`monthly_income`,`height`,`weight`,`sex`,group`)"
-                     + " VALUES (?,?,?,?,?,?,?,?)";
+           String sqlString= "INSERT INTO `extra_info`(`c_id`, `fater_career_id`, `divorce_status`, `mother_career_id`, `monthly_income`, `height`, `weight`, `sex`, `group`)"
+                   + " VALUES (?,?,?,?,?,?,?,?,?)";
            PreparedStatement insertStatement= connection.prepareStatement(sqlString);
-           insertStatement.setInt(1,exif.getFather_career_id());
-           insertStatement.setInt(2,exif.getDivorce_status());
-           insertStatement.setInt(3,exif.getMother_career_id());
-           insertStatement.setInt(4,exif.getMonthly_income());
-           insertStatement.setFloat(5,exif.getHeight());
-           insertStatement.setFloat(6,exif.getWeight());
-           insertStatement.setInt(7,exif.getSex());
-           insertStatement.setInt(8,exif.getGroup());
+           insertStatement.setInt(1,exif.getC_id());
+           insertStatement.setInt(2,exif.getFather_career_id());
+           insertStatement.setInt(3,exif.getDivorce_status());
+           insertStatement.setInt(4,exif.getMother_career_id());
+           insertStatement.setInt(5,exif.getMonthly_income());
+           insertStatement.setFloat(6,exif.getHeight());
+           insertStatement.setFloat(7,exif.getWeight());
+           insertStatement.setInt(8,exif.getSex());
+           insertStatement.setInt(9,exif.getGroup());
            int result=insertStatement.executeUpdate();
           
              if (result==0) {
@@ -63,8 +63,11 @@ public class ExtraInfoRepository implements RepositoryInterface{
               return true; 
                 }
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
-        }}
+        }
+     
+     }
 
         @Override
     public boolean update(Object ob) {
@@ -79,20 +82,20 @@ public class ExtraInfoRepository implements RepositoryInterface{
                    + " `sex`=?, `group`=?"
                    + " WHERE `c_id`=?";
            PreparedStatement updateStatement= connection.prepareStatement(sqlString);
-           updateStatement.setInt(1,extrainfo.getFather_career_id());
-           updateStatement.setInt(2,extrainfo.getDivorce_status());
-           updateStatement.setInt(3,extrainfo.getMother_career_id());
-           updateStatement.setInt(4,extrainfo.getMonthly_income());
-           updateStatement.setFloat(5,extrainfo.getHeight());
-           updateStatement.setFloat(6,extrainfo.getWeight());
-           updateStatement.setInt(7, extrainfo.getSex());
-           updateStatement.setInt(8, extrainfo.getGroup());
-           updateStatement.setInt(9, extrainfo.getC_id());
+           updateStatement.setInt(1,extrainfo.getC_id());
+           updateStatement.setInt(2,extrainfo.getFather_career_id());
+           updateStatement.setInt(3,extrainfo.getDivorce_status());
+           updateStatement.setInt(4,extrainfo.getMother_career_id());
+           updateStatement.setFloat(5,extrainfo.getMonthly_income());
+           updateStatement.setFloat(6,extrainfo.getHeight());
+           updateStatement.setFloat(7, extrainfo.getWeight());
+           updateStatement.setInt(8, extrainfo.getSex());
+           updateStatement.setInt(9, extrainfo.getGroup());
            
            int result=updateStatement.executeUpdate();
           
            if (result==0) {
-               System.out.println("update failed");
+             System.out.println("update failed");
              return false;
                
              
@@ -100,6 +103,7 @@ public class ExtraInfoRepository implements RepositoryInterface{
               return true; 
          }
        } catch (Exception e) {
+          
            e.printStackTrace();
        }
     return false;      
@@ -108,5 +112,10 @@ public class ExtraInfoRepository implements RepositoryInterface{
     @Override
     public boolean deleteById(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    public static void main(String[] args) {
+        ExtraInfoRepository extraInfoRepository = new ExtraInfoRepository();
+        ExtraInfo extraInfo= new ExtraInfo(41, 2, 0, 2 ,1, 0, 0, 0, 0);
+        System.out.println(extraInfoRepository.save(extraInfo));
     }
 }
