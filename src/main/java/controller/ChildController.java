@@ -104,7 +104,6 @@ public Map newChild(
                             0, 0, child_sex_int, 0);
                     extraInfoRepository.save(extraInfor);
                     child.setC_id(new_c_id);
-                    respone.put("testpath",resouce);
                     respone.put("status","1");
                     respone.put("child", child);
                     writeTofile(file, fileName);
