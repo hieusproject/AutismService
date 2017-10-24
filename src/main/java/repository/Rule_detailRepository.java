@@ -7,10 +7,13 @@ package repository;
 
 import entity.ExtraInfo;
 import entity.Rule_Detail;
+import entity.TestType;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -94,6 +97,37 @@ public class Rule_detailRepository implements RepositoryInterface{
     @Override
     public boolean deleteById(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public Map getTestTypeofRule(int rule_id){
+    Map result= new HashMap();
+    ArrayList<TestType> types= new ArrayList<TestType>();
+     try {
+            String getSQL="SELECT test_type.type_id as type_id,test_type.type_name as type_name,test_type.question_src as question_src "
+                    + "FROM `test_rule_detail` JOIN test_type"
+                    + " ON test_rule_detail.type_id= test_type.type_id "
+                    + "WHERE test_rule_id=?";
+            PreparedStatement getST= connection.prepareStatement(getSQL);
+            getST.setInt(1, rule_id);
+            ResultSet rs=getST.executeQuery();
+            while (rs.next()) {      
+                TestType type= new TestType(rs.getInt("type_id"),rs.getString("type_name"),rs.getString("question_src"));
+                types.add(type);
+                
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    result.put("test_rule_id",rule_id);
+    result.put("levels",types);
+    return result;
+    
+    }
+    public static void main(String[] args) {
+        Rule_detailRepository rule_detailRepository= new Rule_detailRepository();
+        System.out.println(rule_detailRepository.getTestTypeofRule(1).toString());
     }
 
 }

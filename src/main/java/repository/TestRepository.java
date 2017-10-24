@@ -13,14 +13,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author AnNguyen
  */
 public class TestRepository implements RepositoryInterface {
-     private static Connection connection= Conector.getConnection();
-     @Override
+    private static Connection connection= Conector.getConnection();
+    @Override
     public ArrayList<Object> getAll() {
         ArrayList<Object> tests= new ArrayList<Object>();
         try {
@@ -118,7 +120,27 @@ public class TestRepository implements RepositoryInterface {
     return false;      
     }
 
+   public ArrayList<Map> getTestDoneOfEx(int ex_id){
    
+   ArrayList<Map> result= new ArrayList<Map>();
+     try {
+            String getSQL="SELECT * FROM `test` where ex_id=?";
+            PreparedStatement getST= connection.prepareStatement(getSQL);
+            getST.setInt(1,ex_id);
+            ResultSet rs=getST.executeQuery();
+            while (rs.next()) {      
+              
+                Map test= new HashMap();
+                test.put("id",rs.getInt("test_id"));
+                test.put("result", rs.getString("result_test"));
+                result.add(test);
+            }
+            
+        } catch (Exception e) {
+        }
+   
+   return result;
+   }
 
     
 }

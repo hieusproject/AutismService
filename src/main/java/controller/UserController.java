@@ -145,7 +145,7 @@ public class UserController {
         Map resspone= new HashMap();
         Token tokenOb = tokenRepository.getTokenByCode(token);
        
-        if (token==null) {
+        if (tokenOb==null) {
             resspone.put("status","0");
         } else {
               ArrayList<Map> childs= childRepository.getChildsOfUser(tokenOb.getU_id());

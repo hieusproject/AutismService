@@ -12,6 +12,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -19,6 +21,8 @@ import java.util.ArrayList;
  */
 public class ExaminationRepository implements RepositoryInterface{
      private static Connection connection= Conector.getConnection();
+     static TestRepository testRepository= new TestRepository();
+     static Rule_detailRepository rule_detailRepository= new Rule_detailRepository();
     public ArrayList<Object> getAll() {
         ArrayList<Object> childs= new ArrayList<Object>();
         try {
@@ -92,5 +96,59 @@ public class ExaminationRepository implements RepositoryInterface{
     @Override
     public boolean deleteById(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+    public ArrayList<Examination> getExamsOfChild(int c_id){
+    ArrayList<Examination> result= new ArrayList<Examination>();
+    try {
+            String getSQL="SELECT * FROM `examination` where c_id=?";
+            PreparedStatement getST= connection.prepareStatement(getSQL);
+            getST.setInt(1, c_id);
+            ResultSet rs=getST.executeQuery();
+            while (rs.next()) {      
+                Examination exam= new Examination(rs.getInt("ex_id"), rs.getInt("c_id"), rs.getInt("test_rule_id"),rs.getString("exam_result"),
+                        rs.getDate("date"));
+                System.out.println(exam.getDate());
+                result.add(exam);
+                
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    
+    return result;
+    }
+    public Map getSpecificExam(int ex_id){
+        Map result= new HashMap();
+      
+         try {
+            String getSQL="SELECT * FROM `examination` where ex_id=?";
+            PreparedStatement getST= connection.prepareStatement(getSQL);
+            getST.setInt(1, ex_id);
+            ResultSet rs=getST.executeQuery();
+            while (rs.next()) {      
+                
+                 int test_rule_id= rs.getInt("test_rule_id");
+                 result.put("ex_id", rs.getInt("ex_id"));
+                 result.put("c_id", rs.getInt("c_id"));
+                 result.put("exam_result", rs.getString("exam_result"));
+                 result.put("date",  rs.getDate("date"));
+                 result.put("testdone",testRepository.getTestDoneOfEx(ex_id));
+                 result.put("test_rule",rule_detailRepository.getTestTypeofRule(ex_id));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    
+    return result;
+    }
+    
+   
+    public static void main(String[] args) {
+        ExaminationRepository examinationRepository= new ExaminationRepository();
+        examinationRepository.getSpecificExam(1);
     }
 }
