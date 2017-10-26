@@ -21,6 +21,8 @@ import java.util.Map;
  * @author VanHau
  */
 public class SolutionRepository implements  RepositoryInterface{
+    public static final int LIKE=1;
+    public static final int SUBCRIBE=2;
     private static Connection connection= Conector.getConnection();
      @Override
     public ArrayList<Object> getAll() {
@@ -183,7 +185,48 @@ public class SolutionRepository implements  RepositoryInterface{
        }
     return false;      
     }
-
+    public Map reactSolution(int s_id,int u_id,int action){
+    Map result= new HashMap();
+    String table="solution_like";
+        if (action==SolutionRepository.SUBCRIBE) {
+            table="solution_subcribed";
+        } 
+        try {
+            String insertStm="INSERT INTO "+table+" (`s_id`, `u_id`) VALUES (?,?)";
+            PreparedStatement preparedStatement= connection.prepareStatement(insertStm);
+            preparedStatement.setInt(1,s_id);
+            preparedStatement.setInt(2,u_id);
+            int excutedResult=preparedStatement.executeUpdate();
+            if (excutedResult>0) {
+                result.put("s_id", s_id);
+                result.put("u_id",u_id);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+   
+    return result;
+    }
+    public Map solutionRating(int s_id,int u_id,int rate){
+    Map result= new HashMap();
+        try {
+            String insertStm="INSERT INTO `child_solution`(`c_id`, `s_id`, `rating`) VALUES (?,?,?)";
+            PreparedStatement preparedStatement= connection.prepareStatement(insertStm);
+            preparedStatement.setInt(1,s_id);
+            preparedStatement.setInt(2,u_id);
+            preparedStatement.setInt(3, rate);
+            int excutedResult=preparedStatement.executeUpdate();
+            if (excutedResult>0) {
+                result.put("s_id", s_id);
+                result.put("u_id",u_id);
+                result.put("u_id",rate);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+   
+    return result;
+    }
     @Override
     public boolean deleteById(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
