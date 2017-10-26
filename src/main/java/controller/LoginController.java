@@ -40,6 +40,8 @@ public class LoginController {
             tokenRepository.save(tk);
             respone.put("status","1");
             respone.put("token",tk.getToken_code());
+            user.setPassword("*********");
+            respone.put("user",user);
         } else {
             respone.put("status","0");
             respone.put("token","");
@@ -53,13 +55,19 @@ public class LoginController {
     public Map getUserTokenByCode(@RequestParam(name="token") String token){
         Map respone= new HashMap();
         Token tk= tokenRepository.getTokenByCode(token);
-        if (tk!=null) {
+     
+       
+        if (tk==null) {
+           respone.put("status","0");
+           respone.put("token","");
+        } else {
+            User user=userRepository.getUserbyId(tk.getU_id());
             respone.put("status","1");
             respone.put("token",tk.getToken_code());
-        } else {
-            respone.put("status","0");
-            respone.put("token","");
+            user.setPassword("*******");
+            respone.put("user", user);
         }
+         
     return respone;
     }
   

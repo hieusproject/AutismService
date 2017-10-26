@@ -113,6 +113,28 @@ public class UserRepository implements RepositoryInterface{
     return null;
     
     }
+    public User getUserbyId(int u_id){
+     try {
+      
+           String sqlString= "SELECT * FROM `user` WHERE u_id= ?";
+           PreparedStatement getStatement= connection.prepareStatement(sqlString);
+                        getStatement.setInt(1,u_id);     
+           ResultSet rs= getStatement.executeQuery();
+           
+             while (rs.next()) {                 
+                 User user= new User(rs.getInt("u_id"), rs.getString("username"),
+                         rs.getString("password"), rs.getString("fullName"),
+                         rs.getString("address"), rs.getString("phone"),
+                         rs.getString("email"), rs.getDate("age"),
+                         rs.getDate("date_created"),rs.getInt("role"));
+                 return user;
+             }
+       } catch (Exception e) {
+           return null;
+       }
+    return null;
+    
+    }
 
     public boolean save(Object ob) {
        User user=(User) ob; 
@@ -224,12 +246,13 @@ public class UserRepository implements RepositoryInterface{
                  users.add(user);
              }
        } catch (Exception e) {
+           e.printStackTrace();
        }
     return  users;
     }
      
     public static void main(String[] args) throws ParseException {
         UserRepository repository= new UserRepository();
-        System.out.println(repository.getAll().size());
+        System.out.println(repository.getUserbyId(0));
     }
 }
