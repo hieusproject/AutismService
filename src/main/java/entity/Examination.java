@@ -17,16 +17,17 @@ public class Examination {
     private int test_rule_id;
     private String exam_result;
     private Date date;
-
+    private String title;
     public Examination() {
     }
 
-    public Examination(int ex_id, int c_id, int test_rule_id, String exam_result, Date date) {
+    public Examination(int ex_id, int c_id, int test_rule_id, String exam_result, Date date,String title) {
         this.ex_id = ex_id;
         this.c_id = c_id;
         this.test_rule_id = test_rule_id;
         this.exam_result = exam_result;
         this.date = date;
+        this.title=title;
     }
 
     public int getEx_id() {
@@ -67,6 +68,14 @@ public class Examination {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
    

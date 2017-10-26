@@ -30,8 +30,9 @@ public class ExaminationRepository implements RepositoryInterface{
             PreparedStatement getST= connection.prepareStatement(getSQL);
             ResultSet rs=getST.executeQuery();
             while (rs.next()) {      
-                Examination exam= new Examination(rs.getInt("ex_id"), rs.getInt("c_id"), rs.getInt("test_rule_id"),rs.getString("exam_result"),
-                        rs.getDate("date"));
+                Examination exam= new Examination(rs.getInt("ex_id"), rs.getInt("c_id"),
+                        rs.getInt("test_rule_id"),rs.getString("exam_result"),
+                        rs.getDate("date"),rs.getString("ex_title"));
               childs.add(exam);
             }
         } catch (Exception e) {
@@ -43,12 +44,13 @@ public class ExaminationRepository implements RepositoryInterface{
    public boolean save(Object ob) {
         try {
             Examination ex= (Examination) ob;
-             String sqlString= "INSERT INTO `examination` (`c_id`,`test_rule_id`,`exam_result`,`date`) VALUES (?,?,?,?)";
+             String sqlString= "INSERT INTO `examination` (`c_id`,`test_rule_id`,`exam_result`,`date`,`ex_title`) VALUES (?,?,?,?,?)";
            PreparedStatement insertStatement= connection.prepareStatement(sqlString);
            insertStatement.setInt(1,ex.getC_id());
            insertStatement.setInt(2,ex.getTest_rule_id());
            insertStatement.setString(3,ex.getExam_result());
            insertStatement.setDate(4,ex.getDate());
+           insertStatement.setString(5,ex.getTitle());
            int result=insertStatement.executeUpdate();
           
              if (result==0) {
@@ -68,14 +70,15 @@ public class ExaminationRepository implements RepositoryInterface{
          
            String sqlString= "UPDATE `examination` SET" 
                    + " `c_id`=?, `test_rule_id`=?"
-                   + " `exam_result`=?, `date`=?"
+                   + " `exam_result`=?, `date`=?, `ex_title`=? "
                    + " WHERE `ex_id`=?";
            PreparedStatement updateStatement= connection.prepareStatement(sqlString);
            updateStatement.setInt(1,exams.getC_id());
            updateStatement.setInt(2,exams.getTest_rule_id());
            updateStatement.setString(3, exams.getExam_result());
            updateStatement.setDate(4, exams.getDate());
-           updateStatement.setInt(5, exams.getEx_id());
+           updateStatement.setString(5, exams.getTitle());
+           updateStatement.setInt(6, exams.getEx_id());
            
            int result=updateStatement.executeUpdate();
           
@@ -108,7 +111,7 @@ public class ExaminationRepository implements RepositoryInterface{
             ResultSet rs=getST.executeQuery();
             while (rs.next()) {      
                 Examination exam= new Examination(rs.getInt("ex_id"), rs.getInt("c_id"), rs.getInt("test_rule_id"),rs.getString("exam_result"),
-                        rs.getDate("date"));
+                        rs.getDate("date"),rs.getString("ex_title"));
                 System.out.println(exam.getDate());
                 result.add(exam);
                 
@@ -137,6 +140,7 @@ public class ExaminationRepository implements RepositoryInterface{
                  result.put("date",  rs.getDate("date"));
                  result.put("testdone",testRepository.getTestDoneOfEx(ex_id));
                  result.put("test_rule",rule_detailRepository.getTestTypeofRule(ex_id));
+                 result.put("title", rs.getString("ex_title"));
             }
         } catch (Exception e) {
             e.printStackTrace();
