@@ -66,7 +66,20 @@ public class ExaminationController {
     return response;
     }
     
-    
+    @RequestMapping(value = "/delete_exam",method = RequestMethod.POST)
+    public Map deletedExam(@RequestParam(name = "token") String token,
+                           @RequestParam(name="ex_id") String ex_id_str){
+        Map response= new HashMap();
+        Token tokenOb= tokenRepository.getTokenByCode(token);
+        if (tokenOb==null) {
+            response.put("status","0");
+        } else {
+            examinationRepository.deleteByRow(Integer.parseInt(ex_id_str),tokenOb.getU_id());
+            response.put("status","1");
+        }
+ 
+        return response;
+    }
     
     public static void main(String[] args) {
         System.out.println(examinationRepository.getExamsOfChild(1).size());

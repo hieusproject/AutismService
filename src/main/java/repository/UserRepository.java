@@ -258,4 +258,8 @@ public class UserRepository implements RepositoryInterface{
         UserRepository repository= new UserRepository();
         System.out.println(repository.getUserbyId(0));
     }
+
+    public boolean deleteByRow(int key, int reference) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

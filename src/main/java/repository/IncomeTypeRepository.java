@@ -95,4 +95,8 @@ public class IncomeTypeRepository implements RepositoryInterface{
         int size= new IncomeTypeRepository().getAll().size();
         System.out.println(size);
     }
+
+    public boolean deleteByRow(int key, int reference) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -98,9 +98,30 @@ public class ExaminationRepository implements RepositoryInterface{
 
     @Override
     public boolean deleteById(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {  
+         
+           String sqlString= "UPDATE `examination` SET" 
+                   + "`deleted`=?"
+                   + " WHERE `ex_id`=?";
+           PreparedStatement updateStatement= connection.prepareStatement(sqlString);
+           updateStatement.setInt(1, 1);
+           updateStatement.setInt(2,Integer.parseInt(id));
+           int result=updateStatement.executeUpdate();
+          
+           if (result==0) {
+               System.out.println("update failed");
+             return false;
+               
+             
+         } else {
+              return true; 
+         }
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+    return false;       //To change body of generated methods, choose Tools | Templates.
     }
-    
+   
     
     public ArrayList<Examination> getExamsOfChild(int c_id){
     ArrayList<Examination> result= new ArrayList<Examination>();
@@ -151,8 +172,35 @@ public class ExaminationRepository implements RepositoryInterface{
     }
     
    
-    public static void main(String[] args) {
+   
+
+    public boolean deleteByRow(int key, int reference) {
+          try {  
+         
+           String sqlString= "UPDATE `examinationview` SET" 
+                   + "`deleted`=?"
+                   + " WHERE `ex_id`=? and u_id=?";
+           PreparedStatement updateStatement= connection.prepareStatement(sqlString);
+           updateStatement.setInt(1, 1);
+           updateStatement.setInt(2,key);
+           updateStatement.setInt(3,reference);
+           int result=updateStatement.executeUpdate();
+          
+           if (result==0) {
+               System.out.println("update failed");
+             return false;
+               
+             
+         } else {
+              return true; 
+         }
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+    return false;   
+    }
+     public static void main(String[] args) {
         ExaminationRepository examinationRepository= new ExaminationRepository();
-        examinationRepository.getSpecificExam(1);
+        examinationRepository.deleteByRow(1, 14);
     }
 }

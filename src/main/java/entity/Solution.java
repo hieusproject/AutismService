@@ -15,14 +15,16 @@ public class Solution {
     private int s_id,u_id;
     private String s_title, s_content, s_picture;
     private Date date_created;
+    private int deleted;
 
-    public Solution(int s_id, int u_id, String s_title, String s_content, String s_picture, Date date_created) {
+    public Solution(int s_id, int u_id, String s_title, String s_content, String s_picture, Date date_created,int deleted) {
         this.s_id = s_id;
         this.u_id = u_id;
         this.s_title = s_title;
         this.s_content = s_content;
         this.s_picture = s_picture;
         this.date_created = date_created;
+        this.deleted= deleted;
     }
 
     public int getS_id() {
@@ -71,6 +73,14 @@ public class Solution {
 
     public void setDate_created(Date date_created) {
         this.date_created = date_created;
+    }
+
+    public int getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(int deleted) {
+        this.deleted = deleted;
     }
     
 }

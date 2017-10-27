@@ -142,5 +142,9 @@ public class TestRepository implements RepositoryInterface {
    return result;
    }
 
+    public boolean deleteByRow(int key, int reference) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     
 }

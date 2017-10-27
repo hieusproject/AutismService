@@ -16,4 +16,5 @@ public interface RepositoryInterface {
     public boolean update(Object ob); 
     public boolean deleteById(String id);
     public ArrayList<Object> getAll(); 
+     public boolean deleteByRow(int key,int reference );
 }

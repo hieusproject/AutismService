@@ -169,21 +169,15 @@ public Map newChild(
         }
         if (tokenObj==null) {
             error=true;
-            message+="Invalid c_id,";
+            message+="Log in to continue,";
         } 
-        else{
-            if (!childRepository.isManaged(tokenObj.getU_id(), c_id)) {
-            error=true;
-            message+= "You not managed this child";
-             }
-        }
-        
+       
         if (error) {
             response.put("status","0");
             response.put("message",message);
         } else {
             response.put("status","1");
-            childRepository.deleteById(c_id_str);
+            childRepository.deleteByRow(c_id,tokenObj.getU_id());
         }
         
         return response;

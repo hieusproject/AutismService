@@ -125,7 +125,30 @@ public class ChildRepository implements RepositoryInterface{
        }
     return false;      
     }
+    
+    
+    
+public boolean isManaged(int u_id, int c_id) {
+        try {
 
+            String sqlString = "SELECT * FROM child WHERE  `u_id`=? AND `c_id`=?";
+            PreparedStatement getM = connection.prepareStatement(sqlString);
+            getM.setInt(1, u_id);
+            getM.setInt(2, c_id);
+            ResultSet result = getM.executeQuery();
+            if (result.next() == false) {
+                System.out.println("deo co");
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    
     public ArrayList<Object> getAll() {
         ArrayList<Object> childs= new ArrayList<Object>();
         try {
@@ -165,7 +188,35 @@ public class ChildRepository implements RepositoryInterface{
         }
         return childs;
     }
+  
+
+    public boolean deleteByRow(int key, int reference) {
+         try {  
+         
+           String sqlString= "UPDATE `child` SET" 
+                   + "`deleted`=?"
+                   + " WHERE `c_id`=? and u_id=?";
+           PreparedStatement updateStatement= connection.prepareStatement(sqlString);
+           updateStatement.setInt(1, 1);
+           updateStatement.setInt(2,key);
+             updateStatement.setInt(3,key);
+           int result=updateStatement.executeUpdate();
+          
+           if (result==0) {
+               System.out.println("update failed");
+             return false;
+               
+             
+         } else {
+              return true; 
+         }
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+    return false;      
     
+    }
+      
     public static void main(String[] args) {
        
       ChildRepository childRepository= new ChildRepository();

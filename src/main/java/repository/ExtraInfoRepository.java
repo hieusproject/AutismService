@@ -118,4 +118,8 @@ public class ExtraInfoRepository implements RepositoryInterface{
         ExtraInfo extraInfo= new ExtraInfo(41, 2, 0, 2 ,1, 0, 0, 0, 0);
         System.out.println(extraInfoRepository.save(extraInfo));
     }
+
+    public boolean deleteByRow(int key, int reference) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

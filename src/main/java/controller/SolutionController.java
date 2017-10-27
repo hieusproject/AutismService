@@ -107,7 +107,7 @@ public class SolutionController {
         else{
             respone.put("status","1");
             Date date_created = new Date();
-            Solution solution = new Solution(0, c_id, title, content, title, DataUtil.DataUtil.toSQLDATE(date_created));
+            Solution solution = new Solution(0, c_id, title, content, title, DataUtil.DataUtil.toSQLDATE(date_created),0);
             solutionRepository.save(solution);
             ChildSolution childSolution = new ChildSolution(c_id, c_id, c_id);
         }
@@ -188,6 +188,21 @@ public class SolutionController {
               respone.put("status","1");
         }
          return respone;
+    }
+    
+    
+    @RequestMapping(value = "delete_solution",method=RequestMethod.POST)
+    public Map deleteSolution( @RequestParam(name="token") String token,
+                                 @RequestParam(name="s_id") String s_id_str){
+     Map respone= new HashMap();
+     Token tokenOb = tokenRepostirory.getTokenByCode(token);
+        if (tokenOb==null) {
+            respone.put("status","0");
+        } else {
+            solutionRepository.deleteByRow(tokenOb.getU_id(),Integer.parseInt(s_id_str));
+            respone.put("status","1");
+        }
+    return respone;
     }
     
 }

@@ -132,4 +132,8 @@ public class TokenRepository implements RepositoryInterface{
     public static void main(String[] args) {
         System.out.println(new TokenRepository().getTokenByCode("62f67d43ced797b39b090dcd8ff61541cefeb3a5b841116a87ee7a6cd5326eaf").getU_id());
     }
+
+    public boolean deleteByRow(int key, int reference) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
