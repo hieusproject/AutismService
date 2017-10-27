@@ -19,6 +19,7 @@
 		Select a file : 
                 <input type="file" name="file" accept="image/jpeg" /><br>
                 <input type="text" name="token"/><br>
+                 <input type="text" name="action"/><br>
                 <input type="text" name="fullname"/><br>
                 <input type="text" name="date_of_birth"/><br>
                 <input type="text" name="father"/><br>

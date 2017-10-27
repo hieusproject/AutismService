@@ -32,7 +32,7 @@ public class ExaminationRepository implements RepositoryInterface{
             while (rs.next()) {      
                 Examination exam= new Examination(rs.getInt("ex_id"), rs.getInt("c_id"),
                         rs.getInt("test_rule_id"),rs.getString("exam_result"),
-                        rs.getDate("date"),rs.getString("ex_title"));
+                        rs.getDate("date"),rs.getString("ex_title"),rs.getInt("deleted"));
               childs.add(exam);
             }
         } catch (Exception e) {
@@ -105,13 +105,13 @@ public class ExaminationRepository implements RepositoryInterface{
     public ArrayList<Examination> getExamsOfChild(int c_id){
     ArrayList<Examination> result= new ArrayList<Examination>();
     try {
-            String getSQL="SELECT * FROM `examination` where c_id=?";
+            String getSQL="SELECT * FROM `examination` where c_id=? and deleted=0";
             PreparedStatement getST= connection.prepareStatement(getSQL);
             getST.setInt(1, c_id);
             ResultSet rs=getST.executeQuery();
             while (rs.next()) {      
                 Examination exam= new Examination(rs.getInt("ex_id"), rs.getInt("c_id"), rs.getInt("test_rule_id"),rs.getString("exam_result"),
-                        rs.getDate("date"),rs.getString("ex_title"));
+                        rs.getDate("date"),rs.getString("ex_title"),rs.getInt("deleted"));
                 System.out.println(exam.getDate());
                 result.add(exam);
                 
@@ -127,7 +127,7 @@ public class ExaminationRepository implements RepositoryInterface{
         Map result= new HashMap();
       
          try {
-            String getSQL="SELECT * FROM `examination` where ex_id=?";
+            String getSQL="SELECT * FROM `examination` where ex_id=? and deleted=0";
             PreparedStatement getST= connection.prepareStatement(getSQL);
             getST.setInt(1, ex_id);
             ResultSet rs=getST.executeQuery();

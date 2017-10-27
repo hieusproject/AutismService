@@ -47,11 +47,12 @@ import repository.TokenRepository;
  */
 @RestController
 public class ChildController {
-    TokenRepository tokenRepository=new TokenRepository();
-    ChildRepository childRepository = new ChildRepository();
-    ExtraInfoRepository extraInfoRepository= new ExtraInfoRepository();
-    String resouce="";
-   
+    private TokenRepository tokenRepository=new TokenRepository();
+    private  ChildRepository childRepository = new ChildRepository();
+    private ExtraInfoRepository extraInfoRepository= new ExtraInfoRepository();
+    private static String resouce="";
+    private static final  int NEW=1;
+    private static final  int EDIT=2;
     public ChildController() throws UnsupportedEncodingException {
         String path =  this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
         String fullPath = URLDecoder.decode(path, "UTF-8");
@@ -59,7 +60,7 @@ public class ChildController {
         resouce = pathArr[0]+"/src/main/webapp/images";    
     }
     
-@RequestMapping(value = "newchild",method = RequestMethod.POST)     
+@RequestMapping(value = "/newchild",method = RequestMethod.POST)     
 public Map newChild(
         @Context HttpServletRequest httpRequest,
         @Context HttpServletRequest httpRespone
@@ -75,18 +76,28 @@ public Map newChild(
             String token= multipartResquest.getParameter("token");
             String fullname= multipartResquest.getParameter("fullname");
             String date_of_birth= multipartResquest.getParameter("date_of_birth");
+            String date_created_str= multipartResquest.getParameter("date_created");
             String father= multipartResquest.getParameter("father");
             String mother= multipartResquest.getParameter("mother");
             String father_career= multipartResquest.getParameter("father_career");
             String mother_career= multipartResquest.getParameter("mother_career");
             String monthly_income= multipartResquest.getParameter("monthly_income");
             String child_sex= multipartResquest.getParameter("child_sex");
+            String action_str=multipartResquest.getParameter("action");
+            String c_id_str= multipartResquest.getParameter("c_id");
+            int action=0;
+            try {
+                action=Integer.parseInt(action_str);
+                } catch (Exception e) {
+                action=0;    
+            }
             String imgUrl= "/images/"+fileName;
             Token tokenOb = tokenRepository.getTokenByCode(token);
             
-        if (tokenOb==null) {
+        if (tokenOb==null||action==0) {
             respone.put("status","0");
-        } else {
+        } else {    
+                    if (action==NEW) {
                     Date dateCreated=new Date();
                     Date birthDate= DataUtil.StringtoDate(date_of_birth);
                     Child child= new Child(0,tokenOb.getU_id() ,
@@ -106,13 +117,77 @@ public Map newChild(
                     child.setC_id(new_c_id);
                     respone.put("status","1");
                     respone.put("child", child);
-                    writeTofile(file, fileName);
+                     if (!file.isEmpty()) {
+                               writeTofile(file, fileName);
+                        }
+                
+            }
+                    if (action==EDIT) {
+                    Date birthDate= DataUtil.StringtoDate(date_of_birth);    
+                    Date date_created=DataUtil.StringtoDate(date_created_str);  
+                    int c_id= Integer.parseInt(c_id_str);
+                    Child child= new Child(c_id, tokenOb.getU_id(), fullname,
+                             DataUtil.toSQLDATE(birthDate), father, mother,
+                             DataUtil.toSQLDATE(date_created), 0, imgUrl);
+                     childRepository.update(child);
+                    int father_career_id= Integer.parseInt(father_career);
+                    int mother_career_id= Integer.parseInt(mother_career);
+                    int monthly_income_int= Integer.parseInt(monthly_income);
+                    int child_sex_int = Integer.parseInt(child_sex);
+                    ExtraInfo extraInfor= new ExtraInfo(c_id, father_career_id, 0,
+                            mother_career_id, monthly_income_int,
+                            0, 0, child_sex_int, 0);
+                    extraInfoRepository.update(extraInfor);
+                    respone.put("status","1");
+                    respone.put("child", child);
+                        if (!file.isEmpty()) {
+                               writeTofile(file, fileName);
+                        }
+                 
+                
+            }
+                  
              
         }
 
             return respone;
 }    
-    
+
+    @RequestMapping(value = "/delete_child",method=RequestMethod.POST)
+    public Map deleteChildbyID(@RequestParam(name="token") String token,
+                               @RequestParam(name="c_id") String c_id_str ){
+        Map response= new HashMap();
+        Token tokenObj= tokenRepository.getTokenByCode(token);
+        boolean error= false;
+        int c_id=0;
+        String message="";
+        try {
+            c_id=Integer.parseInt(c_id_str);
+        } catch (Exception e) {
+            error=true;
+            message+="Invalid c_id,";
+        }
+        if (tokenObj==null) {
+            error=true;
+            message+="Invalid c_id,";
+        } 
+        else{
+            if (!childRepository.isManaged(tokenObj.getU_id(), c_id)) {
+            error=true;
+            message+= "You not managed this child";
+             }
+        }
+        
+        if (error) {
+            response.put("status","0");
+            response.put("message",message);
+        } else {
+            response.put("status","1");
+            childRepository.deleteById(c_id_str);
+        }
+        
+        return response;
+    }
     
     public void writeTofile(MultipartFile filePart,String filename) throws IOException{
             OutputStream out = null;

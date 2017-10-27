@@ -18,16 +18,18 @@ public class Examination {
     private String exam_result;
     private Date date;
     private String title;
+    private int deleted;
     public Examination() {
     }
 
-    public Examination(int ex_id, int c_id, int test_rule_id, String exam_result, Date date,String title) {
+    public Examination(int ex_id, int c_id, int test_rule_id, String exam_result, Date date,String title,int deleted) {
         this.ex_id = ex_id;
         this.c_id = c_id;
         this.test_rule_id = test_rule_id;
         this.exam_result = exam_result;
         this.date = date;
         this.title=title;
+        this.deleted=deleted;
     }
 
     public int getEx_id() {
@@ -76,6 +78,14 @@ public class Examination {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(int deleted) {
+        this.deleted = deleted;
     }
 
    

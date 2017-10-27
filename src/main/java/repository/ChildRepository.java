@@ -39,9 +39,10 @@ public class ChildRepository implements RepositoryInterface{
                     System.out.println("insert failed");
                     return false;
               } else {
-              return true; 
+                    return true; 
                 }
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -49,22 +50,9 @@ public class ChildRepository implements RepositoryInterface{
      public synchronized int newAndreturnId(Child child) {
         int id=-1;
         try {
-         
-             String sqlString= "INSERT INTO `child`(`u_id`,`fullName`,`date_of_birth`,`father_name`,"
-                     + "`mother_name`,`date_created`,`deleted`,`image_url`) VALUES (?,?,?,?,?,?,?,?)";
-           PreparedStatement insertStatement= connection.prepareStatement(sqlString);
-           insertStatement.setInt(1,child.getU_id());
-           insertStatement.setString(2,child.getFullName());
-           insertStatement.setDate(3,child.getDate_of_birth());
-           insertStatement.setString(4,child.getFather_name());
-           insertStatement.setString(5,child.getMother_name());
-           insertStatement.setDate(6,child.getDate_created());
-           insertStatement.setInt(7,child.getDeleted());
-           insertStatement.setString(8,child.getImageURL());
-           int result=insertStatement.executeUpdate();
-          
-             if (result==0) {
-                    System.out.println("insert failed");
+            boolean success= save(child);
+             if (!success) {
+                     System.out.println("insert failed");
                      id=-1;
               } else {
                     String getIdSTM="SELECT MAX(c_id) as id FROM `child`";
@@ -87,7 +75,7 @@ public class ChildRepository implements RepositoryInterface{
          
            String sqlString= "UPDATE `child` SET" 
                    + " `u_id`=?, `fullName`=?, `date_of_birth`=?, `father_name`=?, "
-                   + "`mother_name`=?, `date_created`=?, `deleted`=? `image_url`"
+                   + "`mother_name`=?, `deleted`=? ,`image_url`"
                    + " WHERE `c_id`=?";
            PreparedStatement updateStatement= connection.prepareStatement(sqlString);
            updateStatement.setInt(1,childs.getU_id());
@@ -95,12 +83,10 @@ public class ChildRepository implements RepositoryInterface{
            updateStatement.setDate(3, childs.getDate_of_birth());
            updateStatement.setString(4, childs.getFather_name());
            updateStatement.setString(5, childs.getMother_name());
-           updateStatement.setDate(6, childs.getDate_created());
-           updateStatement.setInt(7, childs.getDeleted());
-           updateStatement.setString(8,childs.getImageURL());
-           updateStatement.setInt(9,childs.getC_id());
+           updateStatement.setInt(6, childs.getDeleted());
+           updateStatement.setString(7,childs.getImageURL());
+           updateStatement.setInt(8,childs.getC_id());
            int result=updateStatement.executeUpdate();
-          
            if (result==0) {
                System.out.println("update failed");
              return false;
@@ -122,8 +108,8 @@ public class ChildRepository implements RepositoryInterface{
                    + "`deleted`=?"
                    + " WHERE `c_id`=?";
            PreparedStatement updateStatement= connection.prepareStatement(sqlString);
-           updateStatement.setString(1, "0");
-           updateStatement.setString(2,id);
+           updateStatement.setInt(1, 1);
+           updateStatement.setInt(2,Integer.parseInt(id));
            int result=updateStatement.executeUpdate();
           
            if (result==0) {
