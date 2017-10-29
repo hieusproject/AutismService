@@ -62,8 +62,24 @@ public class ExaminationRepository implements RepositoryInterface{
         } catch (Exception e) {
             return false;
         }}
-
-        @Override
+   
+   
+   public synchronized int saveAndreturnID(Examination ex){
+       int newId=-1;
+       try {
+           save(ex);
+           String getNewID="SELECT MAX(ex_id) as newest_Id FROM `examination`";
+           PreparedStatement getIdPreparedStatement=connection.prepareStatement(getNewID);
+           ResultSet rs= getIdPreparedStatement.executeQuery();
+           while (rs.next()) {               
+               newId=rs.getInt("newest_Id");
+           }
+       } catch (Exception e) {
+       }
+       return newId;
+   }
+       
+   @Override
     public boolean update(Object ob) {
     Examination exams=(Examination) ob; 
        try {  

@@ -95,4 +95,25 @@ public class RuleRepository implements RepositoryInterface{
     public boolean deleteByRow(int key, int reference) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+     public Rule getActivedRule() {
+       Rule  rule= null;
+        try {
+            String getSQL="SELECT * FROM `test_rule` where active=1";
+            PreparedStatement getST= connection.prepareStatement(getSQL);
+            ResultSet rs=getST.executeQuery();
+            while (rs.next()) {      
+              
+            rule= new Rule(rs.getInt("test_rule_id"), rs.getDate("date_created"), rs.getInt("active"));
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return rule;
+    }
+    public static void main(String[] args) {
+        RuleRepository repository = new RuleRepository();
+        System.out.println(repository.getActivedRule().getRule_id());
+    }
+    
 }
