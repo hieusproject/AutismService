@@ -257,8 +257,63 @@ public class SolutionRepository implements  RepositoryInterface{
        }
     return false;      
     }
+    public  Map getSpecificSolution(int s_id){
+    Map result= new HashMap();
+        try {
+            String getSql= "SELECT * FROM `solution_view` where id=? and deleted=0";
+            PreparedStatement preparedStatement=connection.prepareStatement(getSql);
+            preparedStatement.setInt(1, s_id);
+            ResultSet rs= preparedStatement.executeQuery();
+            while (rs.next()) {                
+                result.put("s_title",rs.getString("s_title"));
+                result.put("s_content",rs.getString("s_content"));
+                result.put("likes",rs.getInt("likes"));
+                result.put("subs",rs.getInt("subcribes"));
+                result.put("contributer",rs.getString("contributer"));
+                result.put("rating",rs.getString("rating"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    
+    return result;
+    }
+    
+    ///kiem tra user da like or subcribe hay cha
+    public Map checkReactedSolutionOfUser(int u_id,int s_id){
+        Map result = new HashMap();
+        int liked=0;
+        int subcribed=0;
+        try {
+            String checkLikedSql="SELECT * FROM `solution_like` WHERE u_id=?";
+            String checkSubcribedSql="SELECT * FROM `solution_subcribed` WHERE u_id=?";
+            PreparedStatement likedPreparedStatement= connection.prepareStatement(checkLikedSql);
+            likedPreparedStatement.setInt(1, u_id);
+            PreparedStatement subedPreparedStatement= connection.prepareStatement(checkSubcribedSql);
+            subedPreparedStatement.setInt(1, u_id);
+            ResultSet rs1= likedPreparedStatement.executeQuery();
+            ResultSet rs2= subedPreparedStatement.executeQuery();
+            while(rs1.next()){
+                liked=1;
+                break;
+            }
+            while(rs1.next()){
+                subcribed=1;
+                break;
+            }
+            
+        } catch (Exception e) {
+        }
+        result=getSpecificSolution(s_id);
+        result.put("liked",liked);
+        result.put("subcribed",subcribed);
+        return result;
+    }
+    
+    
+    
       public static void main(String[] args) {
         SolutionRepository soRepository= new SolutionRepository();
-        soRepository.deleteByRow(2, 3);
+        soRepository.checkReactedSolutionOfUser(2, 2);
     }
 }
