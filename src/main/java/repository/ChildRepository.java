@@ -216,7 +216,22 @@ public boolean isManaged(int u_id, int c_id) {
     return false;      
     
     }
-      
+    
+    public Child getChildById(int c_id){
+    Child child= new Child();
+        try {
+                String getSql="SELECT * FROM `child` WHERE c_id=?";
+                PreparedStatement getPreparedStatement= connection.prepareStatement(getSql);
+                getPreparedStatement.setInt(1, c_id);
+                ResultSet rs=getPreparedStatement.executeQuery();
+                while (rs.next()) {                
+               
+            }
+        } catch (Exception e) {
+        }
+    return child;
+    }
+    
     public static void main(String[] args) {
        
       ChildRepository childRepository= new ChildRepository();

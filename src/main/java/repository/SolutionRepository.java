@@ -45,23 +45,23 @@ public class SolutionRepository implements  RepositoryInterface{
      public ArrayList<Map> getTopByc_id(int c_id) {
         ArrayList<Map> result= new ArrayList<Map>();
         try {
-            String getSQL="SELECT slt.s_id as s_id,slt.s_title as title,slt.s_content as content ,likeview.likes as likes"
-                    + " FROM solution slt JOIN child_solution_recommend c_slt_rcm ON slt.s_id=c_slt_rcm.s_id  "
-                    + "Join likeview ON slt.s_id= likeview.s_id "
-                    + "WHERE c_id=? and deleted=0 "
-                    + "ORDER BY c_slt_rcm.rating DESC LIMIT 5";
+            String getSQL="SELECT * FROM `solution_view` JOIN child_solution_recommend csr"
+                    + " ON solution_view.id=csr.s_id "
+                    + "WHERE csr.c_id=? and solution_view.deleted=0 "
+                    + "ORDER BY solution_view.likes DESC LIMIT 5";
             PreparedStatement getST= connection.prepareStatement(getSQL);
             getST.setInt(1, c_id);
             ResultSet rs=getST.executeQuery();
-             System.out.println("get sucsess");
+    
             while (rs.next()) {     
                 Map line= new HashMap();
-                line.put("title",rs.getString("title"));
-                line.put("content",rs.getString("content"));
+                line.put("title",rs.getString("s_title"));
+                line.put("content",rs.getString("s_content"));
                 line.put("likes",rs.getInt("likes"));
-                Map solution= new HashMap();
-                solution.put(Integer.toString(rs.getInt("s_id")), line);
-                result.add(solution);
+                line.put("subs", rs.getInt("subcribes"));
+                line.put("id",rs.getInt("id"));
+                line.put("owner",rs.getString("contributer"));
+                result.add(line);
             }
             
         } catch (Exception e) {
@@ -75,12 +75,7 @@ public class SolutionRepository implements  RepositoryInterface{
         ArrayList<Map> result= new ArrayList<Map>();
         
         try {
-            String getSQL="SELECT solution.s_id as s_id,s_title,s_content,likeview.likes as likes"
-                    + " FROM `solution` JOIN likeview  ON solution.s_id=likeview.s_id "
-                    + "where deleted=0"
-                    + " GROUP BY solution.s_id "
-                    + " ORDER BY likes DESC  "
-                    + " LIMIT ?,? ";
+            String getSQL="SELECT * FROM `solution_view` where deleted=0 ORDER BY solution_view.likes DESC LIMIT ?,?";
             PreparedStatement getST= connection.prepareStatement(getSQL);
             getST.setInt(1, begin);
             getST.setInt(2, end);
@@ -91,9 +86,9 @@ public class SolutionRepository implements  RepositoryInterface{
                 line.put("title",rs.getString("s_title"));
                 line.put("content",rs.getString("s_content"));
                 line.put("likes",rs.getInt("likes"));
-                Map solution= new HashMap();
-                solution.put(Integer.toString(rs.getInt("s_id")), line);
-                result.add(solution);
+                line.put("subs", rs.getInt("subcribes"));
+                line.put("id",rs.getInt("id"));
+                result.add(line);
             }
             
         } catch (Exception e) {
@@ -109,7 +104,7 @@ public class SolutionRepository implements  RepositoryInterface{
             String getSQL="SELECT solution.s_id as s_id,s_title,s_content,likeview.likes as likes"
                     + " FROM solution JOIN child_solution"
                     + " ON solution.s_id= child_solution.s_id "
-                    + "JOIN likeview "
+                    + "left JOIN likeview "
                     + "ON solution.s_id=likeview.s_id  "
                     + " WHERE child_solution.c_id=  ?  and deleted=0";
             PreparedStatement getST= connection.prepareStatement(getSQL);
