@@ -75,7 +75,7 @@ public class SolutionController {
         }
         else{
             respone.put("status","1");
-            ArrayList<Map> solutionList= solutionRepository.getRatedSolution(c_id);
+            ArrayList<Map> solutionList= solutionRepository.getRatedSolution(c_id,tokenOb.getU_id());
             respone.put("solutions",solutionList);
             
         }

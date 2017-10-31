@@ -60,7 +60,7 @@ public class SolutionRepository implements  RepositoryInterface{
                 line.put("likes",rs.getInt("likes"));
                 line.put("subs", rs.getInt("subcribes"));
                 line.put("id",rs.getInt("id"));
-                line.put("owner",rs.getString("contributer"));
+                line.put("contributer",rs.getString("contributer"));
                 result.add(line);
             }
             
@@ -88,6 +88,7 @@ public class SolutionRepository implements  RepositoryInterface{
                 line.put("likes",rs.getInt("likes"));
                 line.put("subs", rs.getInt("subcribes"));
                 line.put("id",rs.getInt("id"));
+                line.put("contributer",rs.getString("contributer"));
                 result.add(line);
             }
             
@@ -96,30 +97,30 @@ public class SolutionRepository implements  RepositoryInterface{
         }
         return result;
     }
-       public ArrayList<Map> getRatedSolution(int c_id) {
+       public ArrayList<Map> getRatedSolution(int c_id,int u_id) {
          
         ArrayList<Map> result= new ArrayList<Map>();
         
         try {
-            String getSQL="SELECT solution.s_id as s_id,s_title,s_content,likeview.likes as likes"
-                    + " FROM solution JOIN child_solution"
-                    + " ON solution.s_id= child_solution.s_id "
-                    + "left JOIN likeview "
-                    + "ON solution.s_id=likeview.s_id  "
-                    + " WHERE child_solution.c_id=  ?  and deleted=0";
+            String getSQL="SELECT * FROM solution_view LEFT JOIN child_solution ON child_solution.s_id=solution_view.id"
+                    + " LEFT JOIN child On child_solution.c_id=child.c_id"
+                    + " WHERE child_solution.c_id=? and child.u_id=? and solution_view.deleted=0 "
+                    + " ORDER BY solution_view.likes DESC";
             PreparedStatement getST= connection.prepareStatement(getSQL);
             getST.setInt(1, c_id);
+            getST.setInt(2, u_id);
             ResultSet rs=getST.executeQuery();
              System.out.println("get sucsess");
             while (rs.next()) {  
             
                 Map line= new HashMap();
+                line.put("id",rs.getInt("id"));
                 line.put("title",rs.getString("s_title"));
                 line.put("content",rs.getString("s_content"));
                 line.put("likes",rs.getInt("likes"));
-                Map solution= new HashMap();
-                solution.put(Integer.toString(rs.getInt("s_id")), line);
-                result.add(solution);
+                line.put("subs",rs.getInt("subcribes"));
+                line.put("contributer",rs.getString("contributer"));
+                result.add(line);
             }
             
         } catch (Exception e) {
@@ -309,6 +310,7 @@ public class SolutionRepository implements  RepositoryInterface{
     
       public static void main(String[] args) {
         SolutionRepository soRepository= new SolutionRepository();
-        soRepository.checkReactedSolutionOfUser(2, 2);
+          System.out.println(soRepository.getRatedSolution(1,2).size());
+        
     }
 }
