@@ -176,7 +176,7 @@ public class ExaminationRepository implements RepositoryInterface{
                  result.put("exam_result", rs.getString("exam_result"));
                  result.put("date",  rs.getDate("date"));
                  result.put("testdone",testRepository.getTestDoneOfEx(ex_id));
-                 result.put("test_rule",rule_detailRepository.getTestTypeofRule(ex_id));
+                 result.put("test_rule",rule_detailRepository.getTestTypeofRule(test_rule_id));
                  result.put("title", rs.getString("ex_title"));
             }
         } catch (Exception e) {
@@ -217,6 +217,6 @@ public class ExaminationRepository implements RepositoryInterface{
     }
      public static void main(String[] args) {
         ExaminationRepository examinationRepository= new ExaminationRepository();
-        examinationRepository.deleteByRow(1, 14);
+         System.out.println(examinationRepository.getSpecificExam(1).get("ex_id"));
     }
 }

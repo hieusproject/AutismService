@@ -44,6 +44,7 @@ import repository.TokenRepository;
 /**
  *
  * @author AnNguyen
+ * can toi uu cho upload anh
  */
 @RestController
 public class ChildController {
@@ -53,6 +54,7 @@ public class ChildController {
     private static String resouce="";
     private static final  int NEW=1;
     private static final  int EDIT=2;
+    private String rootPath="/images";
     public ChildController() throws UnsupportedEncodingException {
         String path =  this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
         String fullPath = URLDecoder.decode(path, "UTF-8");
@@ -119,6 +121,7 @@ public Map newChild(
                     respone.put("child", child);
                      if (!file.isEmpty()) {
                                writeTofile(file, fileName);
+                            
                         }
                 
             }
@@ -184,9 +187,12 @@ public Map newChild(
     }
     
     public void writeTofile(MultipartFile filePart,String filename) throws IOException{
+            if(! new File(rootPath).exists()) {
+                  new File(rootPath).mkdir();
+                }
             OutputStream out = null;
             InputStream filecontent = null;
-            out = new FileOutputStream(new File(resouce + File.separator
+            out = new FileOutputStream(new File(rootPath + File.separator
                 + filename));
             filecontent = filePart.getInputStream();
 

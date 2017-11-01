@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import repository.ChildSolutionRepository;
 import repository.SolutionRepository;
 import repository.TokenRepository;
 
@@ -25,9 +26,11 @@ import repository.TokenRepository;
  */
 @RestController
 public class SolutionController {
+    public static final int LIKE=1;
+    public static final int SUBCRIBE=2;
     private static SolutionRepository solutionRepository= new SolutionRepository();
     private static TokenRepository tokenRepostirory= new TokenRepository();
-    
+    private static ChildSolutionRepository childSolutionRepository= new ChildSolutionRepository();
     @RequestMapping(value = "/get_recommended_solution",method=RequestMethod.GET)
     public Map getRecommededSolution(@RequestParam(name="token") String token,
                                      @RequestParam(name="c_id") String c_idStr){
@@ -99,17 +102,19 @@ public class SolutionController {
         
         return respone;
     }
-    
+    // chua done/.....
+    // can chet is managed the given child
     @RequestMapping(value = "/new_solution",method = RequestMethod.POST)
     public Map newSolutionForChild(@RequestParam(name = "token") String token,
                                     @RequestParam(name = "c_id") String c_idStr,
                                     @RequestParam(name = "title") String title,
                                     @RequestParam(name = "content")String content,
-                                    @RequestParam(name = "rating")String rating){
+                                    @RequestParam(name = "rating")String rating_str){
     Map respone= new HashMap();
     Token tokenOb = tokenRepostirory.getTokenByCode(token);
+    
     int c_id=Integer.parseInt(c_idStr);
-        
+    int rating= Integer.parseInt(rating_str);
         if (tokenOb==null) {
             respone.put("status","0"); 
         }
@@ -117,8 +122,13 @@ public class SolutionController {
             respone.put("status","1");
             Date date_created = new Date();
             Solution solution = new Solution(0, c_id, title, content, title, DataUtil.DataUtil.toSQLDATE(date_created),0);
-            solutionRepository.save(solution);
-            ChildSolution childSolution = new ChildSolution(c_id, c_id, c_id);
+            int s_id=solutionRepository.saveAndReturnID(solution);
+            solution.setS_id(s_id);
+            ChildSolution childSolution = new ChildSolution(s_id, c_id, rating);
+            childSolutionRepository.save(childSolution);
+            solutionRepository.likeSolution(s_id, tokenOb.getU_id());
+            solutionRepository.subSolution(s_id, c_id);
+            respone.put("solution", solution);
         }
        return respone; 
     }
@@ -127,6 +137,7 @@ public class SolutionController {
     public Map reactSolotion(
             @RequestParam(name="token") String token,
                              @RequestParam(name="s_id") String s_id_str,
+                             @RequestParam(name="c_id") String c_id_str,
                              @RequestParam(name="action") String action_str
     ){
         Map respone= new HashMap();
@@ -134,8 +145,12 @@ public class SolutionController {
         boolean error=false;
         String message="";
         int s_id=0;
+        int c_id=0;
         int action=0;
         try {
+             if (c_id_str!=null) {
+                c_id=Integer.parseInt(c_id_str);
+            } 
              s_id=Integer.parseInt(s_id_str);
              action=Integer.parseInt(action_str);
         } catch (Exception e) {
@@ -150,14 +165,22 @@ public class SolutionController {
             error=true;
             message+= "Please log in to continue";
         }
-      
+      /// respone
         if (error) {
             respone.put("status", "0");
             respone.put("message",message);
         } 
         else {
               int u_id= tokenOb.getU_id();
-              solutionRepository.reactSolution(s_id, u_id, action);
+              if (action==LIKE) {
+                solutionRepository.likeSolution(s_id, u_id);
+            }
+              if (action==SUBCRIBE) {
+                  if (c_id!=0) {
+                       solutionRepository.subSolution(s_id, c_id);
+                  }
+               
+            }
               respone.put("status","1");
         }
          return respone;

@@ -21,8 +21,7 @@ import java.util.Map;
  * @author VanHau
  */
 public class SolutionRepository implements  RepositoryInterface{
-    public static final int LIKE=1;
-    public static final int SUBCRIBE=2;
+    
     private static Connection connection= Conector.getConnection();
      @Override
     public ArrayList<Object> getAll() {
@@ -151,8 +150,25 @@ public class SolutionRepository implements  RepositoryInterface{
         } catch (Exception e) {
             return false;
         }}
-
-          @Override
+    public synchronized int  saveAndReturnID(Solution sl){
+    int result=-1;
+        try {
+            save(sl);
+            String getId="SELECT MAX(solution.s_id) id FROM `solution`";
+            PreparedStatement getIdPreparedStatement= connection.prepareStatement(getId);
+            ResultSet rs= getIdPreparedStatement.executeQuery();
+            while (rs.next()) {                
+                result=rs.getInt("id");
+                break;
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    
+    return result;
+    }
+   @Override
     public boolean update(Object ob) {
     Solution solution=(Solution) ob; 
        try {  
@@ -184,14 +200,12 @@ public class SolutionRepository implements  RepositoryInterface{
        }
     return false;      
     }
-    public Map reactSolution(int s_id,int u_id,int action){
+   
+    public Map likeSolution(int s_id,int u_id){
     Map result= new HashMap();
-    String table="solution_like";
-        if (action==SolutionRepository.SUBCRIBE) {
-            table="solution_subcribed";
-        } 
+   
         try {
-            String insertStm="INSERT INTO "+table+" (`s_id`, `u_id`) VALUES (?,?)";
+            String insertStm="INSERT INTO `solution_like`  (`s_id`, `u_id`) VALUES (?,?)";
             PreparedStatement preparedStatement= connection.prepareStatement(insertStm);
             preparedStatement.setInt(1,s_id);
             preparedStatement.setInt(2,u_id);
@@ -199,6 +213,25 @@ public class SolutionRepository implements  RepositoryInterface{
             if (excutedResult>0) {
                 result.put("s_id", s_id);
                 result.put("u_id",u_id);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+   
+    return result;
+    }
+     public Map subSolution(int s_id,int c_id){
+    Map result= new HashMap();
+   
+        try {
+            String insertStm="INSERT INTO `solution_subcribe` (`s_id`, `c_id`) VALUES (?,?)";
+            PreparedStatement preparedStatement= connection.prepareStatement(insertStm);
+            preparedStatement.setInt(1,s_id);
+            preparedStatement.setInt(2,c_id);
+            int excutedResult=preparedStatement.executeUpdate();
+            if (excutedResult>0) {
+                result.put("s_id", s_id);
+                result.put("u_id",c_id);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -309,6 +342,7 @@ public class SolutionRepository implements  RepositoryInterface{
     
     
       public static void main(String[] args) {
+         
         SolutionRepository soRepository= new SolutionRepository();
           System.out.println(soRepository.getRatedSolution(1,2).size());
         

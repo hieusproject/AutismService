@@ -170,7 +170,7 @@ public boolean isManaged(int u_id, int c_id) {
     public ArrayList<Map> getChildsOfUser(int id) {
         ArrayList<Map> childs= new ArrayList<Map>();
         try {
-            String getSQL="SELECT * FROM `child` WHERE u_id=?";
+            String getSQL="SELECT * FROM `child` WHERE u_id=? and deleted=0";
             PreparedStatement getST= connection.prepareStatement(getSQL);
             getST.setInt(1, id);
             ResultSet rs=getST.executeQuery();
@@ -181,6 +181,7 @@ public boolean isManaged(int u_id, int c_id) {
                     object.put("date_of_birth", rs.getDate("date_of_birth"));
                     object.put("father", rs.getString("father_name"));
                     object.put("mother", rs.getString("mother_name"));
+                    object.put("picture", rs.getString("image_url"));
                 childs.add(object);
             }
             
