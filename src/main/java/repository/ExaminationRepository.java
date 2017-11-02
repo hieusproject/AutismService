@@ -142,7 +142,7 @@ public class ExaminationRepository implements RepositoryInterface{
     public ArrayList<Examination> getExamsOfChild(int c_id){
     ArrayList<Examination> result= new ArrayList<Examination>();
     try {
-            String getSQL="SELECT * FROM `examination` where c_id=? and deleted=0";
+            String getSQL="SELECT * FROM `examination` where c_id=? and deleted=0  ORDER BY examination.date DESC";
             PreparedStatement getST= connection.prepareStatement(getSQL);
             getST.setInt(1, c_id);
             ResultSet rs=getST.executeQuery();

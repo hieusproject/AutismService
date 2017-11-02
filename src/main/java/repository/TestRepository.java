@@ -132,7 +132,8 @@ public class TestRepository implements RepositoryInterface {
               
                 Map test= new HashMap();
                 test.put("id",rs.getInt("test_id"));
-                test.put("result", rs.getString("result_test"));
+                String result_test=  rs.getString("result_test");
+                test.put("result", result_test.charAt(result_test.length()-1));
                 result.add(test);
             }
             

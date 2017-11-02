@@ -218,17 +218,25 @@ public boolean isManaged(int u_id, int c_id) {
     
     }
     
-    public Child getChildById(int c_id){
-    Child child= new Child();
+    public Map getChildById(int c_id){
+    Map child= new HashMap();
         try {
-                String getSql="SELECT * FROM `child` WHERE c_id=?";
+                String getSql="SELECT * FROM `child_view` WHERE c_id=?";
                 PreparedStatement getPreparedStatement= connection.prepareStatement(getSql);
                 getPreparedStatement.setInt(1, c_id);
                 ResultSet rs=getPreparedStatement.executeQuery();
                 while (rs.next()) {                
-               
+                child.put("name", rs.getString("name"));
+                child.put("date_of_birth", rs.getDate("date_of_birth"));
+                child.put("father", rs.getString("father"));
+                child.put("mother", rs.getString("mother"));
+                child.put("monthly_income", rs.getString("income"));
+                child.put("father_career", rs.getString("father_carrer"));
+                child.put("mother_career", rs.getString("mother_carrer"));
+                child.put("sex", rs.getInt("sex"));
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
     return child;
     }

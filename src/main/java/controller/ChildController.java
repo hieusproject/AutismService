@@ -155,7 +155,36 @@ public Map newChild(
 
             return respone;
 }    
-
+@RequestMapping(value = "/get_child",method=RequestMethod.GET)
+    public Map getChildbyID(@RequestParam(name="token") String token,
+                            @RequestParam(name="c_id") String c_id_str ){
+        Map response= new HashMap();
+        Token tokenObj= tokenRepository.getTokenByCode(token);
+        boolean error= false;
+        int c_id=0;
+        String message="";
+        try {
+            c_id=Integer.parseInt(c_id_str);
+        } catch (Exception e) {
+            error=true;
+            message+="Invalid c_id,";
+        }
+        if (tokenObj==null) {
+            error=true;
+            message+="Log in to continue,";
+        } 
+       
+        if (error) {
+            response.put("status","0");
+            response.put("message",message);
+        } else {
+            response.put("status","1");
+            response.put("child_infor",childRepository.getChildById(c_id));
+        }
+        
+        return response;
+    }
+    
     @RequestMapping(value = "/delete_child",method=RequestMethod.POST)
     public Map deleteChildbyID(@RequestParam(name="token") String token,
                                @RequestParam(name="c_id") String c_id_str ){
