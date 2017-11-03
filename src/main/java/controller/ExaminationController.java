@@ -108,7 +108,7 @@ public class ExaminationController {
               if (childRepository.isManaged(tokenOb.getU_id(), c_id)) {
               Rule rule= ruleRepository.getActivedRule();
               Date date_create = new Date();
-              Examination exam= new Examination(0, c_id, rule.getRule_id(),"0", DataUtil.toSQLDATE(date_create),title,0);
+              Examination exam= new Examination(0, c_id, rule.getRule_id(),"none", DataUtil.toSQLDATE(date_create),title,0);
               int new_ex_id =examinationRepository.saveAndreturnID(exam);
               if (new_ex_id!=(-1)) {
                 exam.setEx_id(c_id);
