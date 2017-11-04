@@ -220,6 +220,40 @@ public class SolutionRepository implements  RepositoryInterface{
    
     return result;
     }
+     public boolean unlikeSolution(int s_id,int u_id){
+   
+        try {
+            String insertStm="DELETE FROM `solution_like` WHERE solution_like.s_id=? AND solution_like.u_id= ?";
+            PreparedStatement preparedStatement= connection.prepareStatement(insertStm);
+            preparedStatement.setInt(1,s_id);
+            preparedStatement.setInt(2,u_id);
+            int excutedResult=preparedStatement.executeUpdate();
+            if (excutedResult>0) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+   
+        return false;
+    }
+     public boolean unSubSolution(int s_id,int c_id){
+   
+        try {
+            String insertStm="DELETE FROM `solution_subcribe` WHERE solution_subcribe.s_id=? and solution_subcribe.c_id=?";
+            PreparedStatement preparedStatement= connection.prepareStatement(insertStm);
+            preparedStatement.setInt(1,s_id);
+            preparedStatement.setInt(2,c_id);
+            int excutedResult=preparedStatement.executeUpdate();
+            if (excutedResult>0) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+   
+        return false;
+    }
      public Map subSolution(int s_id,int c_id){
     Map result= new HashMap();
    

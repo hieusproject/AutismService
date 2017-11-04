@@ -28,6 +28,9 @@ import repository.TokenRepository;
 public class SolutionController {
     public static final int LIKE=1;
     public static final int SUBCRIBE=2;
+    public static final int UNLIKE=3;
+    public static final int UNSUBCRIBE=4;
+    
     private static SolutionRepository solutionRepository= new SolutionRepository();
     private static TokenRepository tokenRepostirory= new TokenRepository();
     private static ChildSolutionRepository childSolutionRepository= new ChildSolutionRepository();
@@ -158,7 +161,7 @@ public class SolutionController {
             error=true;
              message+= "your request contains invalid value, ";
         }
-        if (action<1||action>2) {
+        if (action<1||action>4) {
             error=true;
             message+= "Invalid action, ";
         }
@@ -175,13 +178,23 @@ public class SolutionController {
               int u_id= tokenOb.getU_id();
               if (action==LIKE) {
                 solutionRepository.likeSolution(s_id, u_id);
-            }
+              }
               if (action==SUBCRIBE) {
                   if (c_id!=0) {
                        solutionRepository.subSolution(s_id, c_id);
                   }
-               
+              }
+              if (action==UNLIKE) {
+                  solutionRepository.unlikeSolution(s_id, u_id);
+                
             }
+                if (action==UNSUBCRIBE) {
+                  solutionRepository.unSubSolution(s_id, c_id);
+                
+            }
+    
+          
+            
               respone.put("status","1");
         }
          return respone;
