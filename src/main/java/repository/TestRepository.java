@@ -143,13 +143,52 @@ public class TestRepository implements RepositoryInterface {
    
    return result;
    }
-
+   public int getLevelOftypeID(int type_id){
+       int level=-1;
+     try {
+            String getSQL="SELECT level FROM test_rule_detail WHERE type_id=?";
+            PreparedStatement getST= connection.prepareStatement(getSQL);
+            getST.setInt(1,type_id);
+            ResultSet rs=getST.executeQuery();
+            while (rs.next()) {      
+              level=rs.getInt(1);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            
+        }
+   
+   return level;
+   
+   
+   }
+    public int getHighestLevel(){
+       int max=-1;
+     try {
+            String getSQL="SELECT MAX(level) highest FROM test_rule_detail";
+            PreparedStatement getST= connection.prepareStatement(getSQL);
+        
+            ResultSet rs=getST.executeQuery();
+            while (rs.next()) {      
+              max=rs.getInt(1);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            
+        }
+   
+   return max;
+   
+   
+   }
     public boolean deleteByRow(int key, int reference) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public static void main(String[] args) {
         TestRepository repository= new TestRepository();
-        Test  test= new Test(0, 0, 0, "1 0 1 0 1", 0);
+        System.out.println(repository.getHighestLevel());
     }
 }

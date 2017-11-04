@@ -125,20 +125,41 @@ public class DoTestController {
             response.put("status","0");
         } else {
             int result= calculatingTest(answers, test_type);
-            String result_test= answers+" "+Integer.toString(result);
-            Test doing_test= new Test(0, test_type, ex_id, result_test, 0);
+            String result_str=Integer.toString(result);
+            String saved_result_test= answers+" "+result_str;
+            Test doing_test= new Test(0, test_type, ex_id, saved_result_test, 0);
             testRepository.save(doing_test);
-            response.put("status","1");
-            response.put("result",result);
-           
+            response.put("status",1);
+            if (result==0) {
+                examinationRepository.updateExamResult(ex_id,"0");
+                response.put("exam_result", 0);
+            }
+            else{
+                response.put("status","1");
+                response.put("test_result",result);
+                int level_of_type_id=testRepository.getLevelOftypeID(test_type);
+                int highest_level=testRepository.getHighestLevel();
+                
+                //get  value from database success
+                if (level_of_type_id!=-1&&highest_level!=-1) {
+                     if (level_of_type_id==highest_level) {
+                        examinationRepository.updateExamResult(ex_id, "1");
+                        response.put("exam_result", 1);
+                    }else{
+                     response.put("exam_result","none");
+                     }
+                }
+                
+            }
+           response.put("test_result",result);
         }
- 
+        
         return response;
     }
     
     
     public static void main(String[] args) {
         String ansers="0 0 0 0 0";
-        System.out.println(calculatingTest(ansers,1));
+        System.out.println(3^0);
     }
 }

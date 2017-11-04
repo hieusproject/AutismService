@@ -111,6 +111,31 @@ public class ExaminationRepository implements RepositoryInterface{
        }
     return false;      
     }
+    public boolean updateExamResult(int ex_id,String result_str) {
+    
+       try {  
+         
+           String sqlString= "UPDATE `examination` SET" 
+                   + " `exam_result`=?"
+                   + " WHERE `ex_id`=? and deleted=0";
+           PreparedStatement updateStatement= connection.prepareStatement(sqlString);
+           updateStatement.setString(1,result_str);
+           updateStatement.setInt(2,ex_id);
+           int result=updateStatement.executeUpdate();
+          
+           if (result==0) {
+               System.out.println("update failed");
+             return false;
+               
+             
+         } else {
+              return true; 
+         }
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+    return false;      
+    }
 
     @Override
     public boolean deleteById(String id) {
