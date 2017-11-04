@@ -61,6 +61,7 @@ public class TestRepository implements RepositoryInterface {
               return true; 
                 }
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }}
 
@@ -147,5 +148,8 @@ public class TestRepository implements RepositoryInterface {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
+    public static void main(String[] args) {
+        TestRepository repository= new TestRepository();
+        Test  test= new Test(0, 0, 0, "1 0 1 0 1", 0);
+    }
 }

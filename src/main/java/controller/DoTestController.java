@@ -6,6 +6,7 @@
 package controller;
 
 import static controller.ExaminationController.tokenRepository;
+import entity.Test;
 import entity.Token;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import repository.ChildRepository;
 import repository.ExaminationRepository;
+import repository.TestRepository;
 import repository.TokenRepository;
 
 /**
@@ -26,11 +28,12 @@ public class DoTestController {
     private static TokenRepository tokenRepository= new TokenRepository();
     private static ExaminationRepository examinationRepository= new ExaminationRepository();
     private static ChildRepository childRepository= new ChildRepository();
+    private static  TestRepository testRepository= new TestRepository();
     static final String ONE="1";
     static final String ONE_STAR="1*";   
     // result=-1->error
-    public static double calculatingTest(String input,int test_type){
-        double result=0;
+    public static int calculatingTest(String input,int test_type){
+        int result=0;
         String [] inputs= input.trim().split(" ");
         int num_of_one=0,num_of_one_Star=0;
         
@@ -59,6 +62,15 @@ public class DoTestController {
         }
         if (test_type==3) {
             double sum= getSum(inputs);
+            if (sum>=15||sum<=29.5) {
+                result=0;
+            }
+             if (sum>=30||sum<=36.5) {
+                result=1;
+            }
+              if (sum>=37||sum<=60) {
+                result=2;
+            }
             
         }
         
@@ -112,7 +124,12 @@ public class DoTestController {
         if (error) {
             response.put("status","0");
         } else {
-            double result= calculatingTest(answers, test_type);
+            int result= calculatingTest(answers, test_type);
+            String result_test= answers+" "+Integer.toString(result);
+            Test doing_test= new Test(0, test_type, ex_id, result_test, 0);
+            testRepository.save(doing_test);
+            response.put("status","1");
+            response.put("result",result);
            
         }
  

@@ -93,9 +93,10 @@ public class SolutionController {
         Token tokenOb = tokenRepostirory.getTokenByCode(token);
         int s_id=Integer.parseInt(s_id_str);
          if (tokenOb==null) {
-             respone.put("status","1");
+             respone.put("status","0");
          } else {
              int u_id=tokenOb.getU_id();
+             respone.put("status","1");
              respone=solutionRepository.checkReactedSolutionOfUser(u_id, s_id);
          }
         
