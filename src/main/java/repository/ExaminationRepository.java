@@ -67,12 +67,13 @@ public class ExaminationRepository implements RepositoryInterface{
    public synchronized int saveAndreturnID(Examination ex){
        int newId=-1;
        try {
-           save(ex);
+           if (save(ex)) {
            String getNewID="SELECT MAX(ex_id) as newest_Id FROM `examination`";
            PreparedStatement getIdPreparedStatement=connection.prepareStatement(getNewID);
            ResultSet rs= getIdPreparedStatement.executeQuery();
            while (rs.next()) {               
                newId=rs.getInt("newest_Id");
+           }
            }
        } catch (Exception e) {
        }

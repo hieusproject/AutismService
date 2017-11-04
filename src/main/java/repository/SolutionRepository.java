@@ -153,7 +153,7 @@ public class SolutionRepository implements  RepositoryInterface{
     public synchronized int  saveAndReturnID(Solution sl){
     int result=-1;
         try {
-            save(sl);
+            if (save(sl)) {
             String getId="SELECT MAX(solution.s_id) id FROM `solution`";
             PreparedStatement getIdPreparedStatement= connection.prepareStatement(getId);
             ResultSet rs= getIdPreparedStatement.executeQuery();
@@ -161,7 +161,7 @@ public class SolutionRepository implements  RepositoryInterface{
                 result=rs.getInt("id");
                 break;
             }
-            
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -299,6 +299,7 @@ public class SolutionRepository implements  RepositoryInterface{
                 result.put("likes",rs.getInt("likes"));
                 result.put("subs",rs.getInt("subcribes"));
                 result.put("contributer",rs.getString("contributer"));
+                result.put("email",rs.getString("email"));
                 result.put("rating",rs.getString("rating"));
             }
         } catch (Exception e) {
