@@ -195,12 +195,12 @@ public boolean isManaged(int u_id, int c_id) {
          try {  
          
            String sqlString= "UPDATE `child` SET" 
-                   + "`deleted`=?"
+                   + "`deleted`=1"
                    + " WHERE `c_id`=? and u_id=?";
            PreparedStatement updateStatement= connection.prepareStatement(sqlString);
-           updateStatement.setInt(1, 1);
-           updateStatement.setInt(2,key);
-             updateStatement.setInt(3,key);
+           updateStatement.setInt(1, key);
+           updateStatement.setInt(2,reference);
+         
            int result=updateStatement.executeUpdate();
           
            if (result==0) {
@@ -230,6 +230,7 @@ public boolean isManaged(int u_id, int c_id) {
                 child.put("date_of_birth", rs.getDate("date_of_birth"));
                 child.put("father", rs.getString("father"));
                 child.put("mother", rs.getString("mother"));
+                child.put("image_url", rs.getString("image_url"));
                 child.put("monthly_income", rs.getString("income"));
                 child.put("father_career", rs.getString("father_carrer"));
                 child.put("mother_career", rs.getString("mother_carrer"));

@@ -100,6 +100,7 @@ public class SolutionController {
          } else {
              int u_id=tokenOb.getU_id();
              respone.put("status","1");
+          
              respone=solutionRepository.checkReactedSolutionOfUser(u_id, s_id);
          }
         

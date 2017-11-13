@@ -285,7 +285,7 @@ public class SolutionRepository implements  RepositoryInterface{
             if (excutedResult>0) {
                 result.put("s_id", s_id);
                 result.put("u_id",u_id);
-                result.put("u_id",rate);
+                result.put("rate",rate);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -349,12 +349,17 @@ public class SolutionRepository implements  RepositoryInterface{
         int liked=0;
         int subcribed=0;
         try {
-            String checkLikedSql="SELECT * FROM `solution_like` WHERE u_id=?";
-            String checkSubcribedSql="SELECT * FROM `solution_subcribed` WHERE u_id=?";
+            String checkLikedSql="SELECT * FROM `solution_like` WHERE s_id=? and u_id=?";
+            String checkSubcribedSql="SELECT solution_subcribe.s_id s_id,solution.u_id u_id "
+                    + "FROM `solution_subcribe` JOIN solution ON solution_subcribe.s_id=solution.u_id "
+                    + "where solution_subcribe.s_id=? and solution.u_id=?";
             PreparedStatement likedPreparedStatement= connection.prepareStatement(checkLikedSql);
-            likedPreparedStatement.setInt(1, u_id);
+            likedPreparedStatement.setInt(1, s_id);
+            likedPreparedStatement.setInt(2, u_id);
             PreparedStatement subedPreparedStatement= connection.prepareStatement(checkSubcribedSql);
-            subedPreparedStatement.setInt(1, u_id);
+            subedPreparedStatement.setInt(1, s_id);
+            subedPreparedStatement.setInt(2, u_id);
+            
             ResultSet rs1= likedPreparedStatement.executeQuery();
             ResultSet rs2= subedPreparedStatement.executeQuery();
             while(rs1.next()){
@@ -373,6 +378,8 @@ public class SolutionRepository implements  RepositoryInterface{
         result.put("subcribed",subcribed);
         return result;
     }
+    
+    
     
     
     
