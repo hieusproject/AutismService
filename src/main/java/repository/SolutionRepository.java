@@ -334,7 +334,6 @@ public class SolutionRepository implements  RepositoryInterface{
                 result.put("subs",rs.getInt("subcribes"));
                 result.put("contributer",rs.getString("contributer"));
                 result.put("email",rs.getString("email"));
-                result.put("rating",rs.getString("rating"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -343,30 +342,52 @@ public class SolutionRepository implements  RepositoryInterface{
     return result;
     }
     
+    public int getRatingFromChildIDAndSolutionID(int c_id, int s_id)
+    {
+        try
+        {
+            String checkRateSql="SELECT * FROM `child_solution` WHERE c_id=? AND s_id=?";
+            PreparedStatement ratingPreparedStatement= connection.prepareStatement(checkRateSql);
+            ratingPreparedStatement.setInt(1, c_id);
+            ratingPreparedStatement.setInt(2, s_id);
+            ResultSet rs1 = ratingPreparedStatement.executeQuery();
+            while(rs1.next()){
+                return rs1.getInt("rating");
+            }
+            
+            return -1;
+            
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+    
     ///kiem tra user da like or subcribe hay cha
-    public Map checkReactedSolutionOfUser(int u_id,int s_id){
+    public Map checkReactedSolutionOfUser(int u_id,int s_id, int c_id){
         Map result = new HashMap();
         int liked=0;
         int subcribed=0;
         try {
-            String checkLikedSql="SELECT * FROM `solution_like` WHERE s_id=? and u_id=?";
-            String checkSubcribedSql="SELECT solution_subcribe.s_id s_id,solution.u_id u_id "
-                    + "FROM `solution_subcribe` JOIN solution ON solution_subcribe.s_id=solution.u_id "
-                    + "where solution_subcribe.s_id=? and solution.u_id=?";
+
+            String checkLikedSql="SELECT * FROM `solution_like` WHERE u_id=? AND s_id=?";
+            String checkSubcribedSql="SELECT * FROM `solution_subcribe` WHERE s_id=? AND c_id=?  ";
             PreparedStatement likedPreparedStatement= connection.prepareStatement(checkLikedSql);
-            likedPreparedStatement.setInt(1, s_id);
-            likedPreparedStatement.setInt(2, u_id);
-            PreparedStatement subedPreparedStatement= connection.prepareStatement(checkSubcribedSql);
-            subedPreparedStatement.setInt(1, s_id);
-            subedPreparedStatement.setInt(2, u_id);
-            
-            ResultSet rs1= likedPreparedStatement.executeQuery();
-            ResultSet rs2= subedPreparedStatement.executeQuery();
+            likedPreparedStatement.setInt(1, u_id);
+            likedPreparedStatement.setInt(2, s_id);
+            ResultSet rs1= likedPreparedStatement.executeQuery();       
             while(rs1.next()){
+                System.out.println("YES!! ");
                 liked=1;
                 break;
             }
-            while(rs1.next()){
+            
+            PreparedStatement subedPreparedStatement= connection.prepareStatement(checkSubcribedSql);
+            subedPreparedStatement.setInt(1, s_id);
+            subedPreparedStatement.setInt(2, c_id);
+            ResultSet rs2= subedPreparedStatement.executeQuery();
+            while(rs2.next()){
                 subcribed=1;
                 break;
             }
@@ -375,7 +396,10 @@ public class SolutionRepository implements  RepositoryInterface{
         }
         result=getSpecificSolution(s_id);
         result.put("liked",liked);
+        System.out.println("LIked: " + liked);
+        System.out.println("u_id: " + u_id);
         result.put("subcribed",subcribed);
+        result.put("rating",getRatingFromChildIDAndSolutionID(c_id, s_id));
         return result;
     }
     
