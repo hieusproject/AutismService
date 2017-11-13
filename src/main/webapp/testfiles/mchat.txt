@@ -1,5 +1,6 @@
 ﻿{
   "Thang M-CHAT": {
+    "test_type": "2",
     "question_list": [
       {
 	"question": "Con bạn có thích được lắc lư hoặc nâng lên hạ xuống trên đầu gối của bạn không?",

@@ -1,0 +1,42 @@
+{
+  "Dấu hiệu cờ đỏ": {
+    "test_type": "1",
+    "question_list": [
+      {
+        "question": "12 tháng không nói bập bẹ",
+        "options": [
+          {"option": "Không"},
+          {"option": "Có"}
+        ]
+      },
+      {
+        "question": "12 tháng chưa chỉ ngón trỏ hoặc không có cử chỉ điệu bộ giao tiếp phù hợp",
+        "options": [
+          {"option": "Không"},
+          {"option": "Có"}
+        ]
+      },
+      {
+        "question": "16 tháng chưa nói được từ đơn",
+        "options": [
+          {"option": "Không"},
+          {"option": "Có"}
+        ]
+      },
+      {
+        "question": "24 tháng chưa nói được câu 2 từ",
+        "options": [
+          {"option": "Không"},
+          {"option": "Có"}
+        ]
+      },
+      {
+        "question": "Trẻ bị mất đi kỹ năng ngôn ngữ hoặc kỹ năng xã hội đã có ở bất kỳ lứa tuổi nào",
+        "options": [
+          {"option": "Không"},
+          {"option": "Có"}
+        ]
+      }
+    ]
+  }
+}

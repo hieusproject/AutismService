@@ -221,7 +221,7 @@ public Map newChild(
                 }
             OutputStream out = null;
             InputStream filecontent = null;
-            out = new FileOutputStream(new File(rootPath + File.separator
+            out = new FileOutputStream(new File(resouce + File.separator
                 + filename));
             filecontent = filePart.getInputStream();
 

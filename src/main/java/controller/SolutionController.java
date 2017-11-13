@@ -91,16 +91,18 @@ public class SolutionController {
      @RequestMapping(value = "/get_solution",method=RequestMethod.GET)
     public Map getSolutionBys_id(
             @RequestParam(name="token") String token,
-            @RequestParam(name="s_id") String s_id_str){
+            @RequestParam(name="s_id") String s_id_str,
+            @RequestParam(name="c_id") String c_id_str){
         Map respone= new HashMap();
         Token tokenOb = tokenRepostirory.getTokenByCode(token);
         int s_id=Integer.parseInt(s_id_str);
+        int c_id=Integer.parseInt(c_id_str);
          if (tokenOb==null) {
              respone.put("status","0");
          } else {
              int u_id=tokenOb.getU_id();
              respone.put("status","1");
-             respone=solutionRepository.checkReactedSolutionOfUser(u_id, s_id);
+             respone=solutionRepository.checkReactedSolutionOfUser(u_id, s_id, c_id);
          }
         
         

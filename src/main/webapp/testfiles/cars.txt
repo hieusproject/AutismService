@@ -1,5 +1,6 @@
 ﻿{
   "Thang CARS": {
+    "test_type":"3",
     "question_list": [
       {
 	"question": "QUAN HỆ VỚI MỌI NGƯỜI",

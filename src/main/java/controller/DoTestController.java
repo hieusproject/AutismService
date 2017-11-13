@@ -30,45 +30,49 @@ public class DoTestController {
     private static ChildRepository childRepository= new ChildRepository();
     private static  TestRepository testRepository= new TestRepository();
     static final String ONE="1";
-    static final String ONE_STAR="1*";   
+    static final String ONE_STAR="1*"; 
+    static final int[] one_star_position={2,7,9,14,15};
     // result=-1->error
     public static int calculatingTest(String input,int test_type){
         int result=0;
+        
         String [] inputs= input.trim().split(" ");
         int num_of_one=0,num_of_one_Star=0;
-        
+        double sum=0;
+        double onestart_sum=0;
         if (test_type==1) {
-            num_of_one=getNumsOfLetter(inputs,ONE);
-            if (num_of_one>0) {
+            sum=getSum(inputs);
+            if (sum>0) {
                 result=1;
             }
             else{ result=0;}
         }
         if (test_type==2) {
-            num_of_one=getNumsOfLetter(inputs, ONE);
-            num_of_one_Star=getNumsOfLetter(inputs, ONE_STAR);
-            if (num_of_one>=3) {
+            sum=getSum(inputs);
+            onestart_sum=getSumOneStar(inputs);
+            sum=sum-onestart_sum;
+            if (sum>=3) {
                 result=1;
             }
             else{
-                if (num_of_one_Star==2) {
+                if (onestart_sum==2) {
                     result=1;
                 }
-                if (num_of_one_Star<2) {
+                if (onestart_sum<2) {
                     result=0;
                 }
             }
             
         }
         if (test_type==3) {
-            double sum= getSum(inputs);
-            if (sum>=15||sum<=29.5) {
+             sum= getSum(inputs);
+            if (sum>=15&&sum<=29.5) {
                 result=0;
             }
-             if (sum>=30||sum<=36.5) {
+             if (sum>=30&&sum<=36.5) {
                 result=1;
             }
-              if (sum>=37||sum<=60) {
+              if (sum>=37&&sum<=60) {
                 result=2;
             }
             
@@ -97,6 +101,31 @@ public class DoTestController {
                 e.printStackTrace();
                 sum=-1;
             }
+        }
+    return sum;
+    }
+    public static boolean isOneStarQuestion(int i){
+        for (int j = 0; j < one_star_position.length; j++) {
+            int k = one_star_position[j];
+            if (k==i) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public  static double  getSumOneStar(String [] intputs){
+    double sum=0;
+        for (int i = 0; i < intputs.length; i++) {
+            String intput = intputs[i];
+            if (isOneStarQuestion(i+1)) {
+                try {
+                sum+=Double.parseDouble(intput);
+                  } catch (Exception e) {
+                e.printStackTrace();
+                sum=-1;
+                 }
+            }
+           
         }
     return sum;
     }
@@ -159,7 +188,8 @@ public class DoTestController {
     
     
     public static void main(String[] args) {
-        String ansers="0 0 0 0 0";
-        System.out.println(3^0);
+        String ansers="0.0 1.0 1.0 1.0 0.0 0.0 0.0";
+        System.out.println(getSum(ansers.split(" ")));
+        
     }
 }
