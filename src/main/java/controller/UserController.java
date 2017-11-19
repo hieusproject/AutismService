@@ -45,6 +45,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Context;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -53,9 +54,12 @@ import org.json.simple.JSONObject;
 @RestController
 //@RequestMapping(value = "/ManageUser")
 public class UserController {
-    private static UserRepository userRepository= new UserRepository();
-    private static ChildRepository childRepository=new ChildRepository();
-    private static TokenRepository tokenRepository= new TokenRepository();
+    @Autowired
+     UserRepository userRepository;
+    @Autowired
+     ChildRepository childRepository;
+    @Autowired
+     TokenRepository tokenRepository;
     @RequestMapping(value = "/hello",method = RequestMethod.GET)
     public Object sayHello() throws ParserConfigurationException, SAXException, IOException{
     String jsonfile="";

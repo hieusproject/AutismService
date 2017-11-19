@@ -26,7 +26,7 @@ public class Conector {
         }
         
         try {
-            connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/autismsvdb?serverTimezone=UTC", "root","1");
+            connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/autismsvdb?serverTimezone=UTC", "root","");
             System.out.println("connect successfull");
            
         } catch (Exception e) {
@@ -37,5 +37,6 @@ public class Conector {
     }
     
     public static void main(String[] args) throws SQLException {
+        getConnection();
     }
 }

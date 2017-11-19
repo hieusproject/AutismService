@@ -14,11 +14,14 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author AnNguyen
  */
+@Repository
+
 public class ExaminationRepository implements RepositoryInterface{
      private static Connection connection= Conector.getConnection();
      static TestRepository testRepository= new TestRepository();

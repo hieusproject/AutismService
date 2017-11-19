@@ -10,6 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,8 +24,10 @@ import repository.TokenRepository;
  */
 @RestController
 public class Income_typeController {
-    IncomeTypeRepository incomeTypeRepository= new IncomeTypeRepository();
-    TokenRepository tokenRepository = new TokenRepository();
+    @Autowired
+    IncomeTypeRepository incomeTypeRepository;
+    @Autowired
+    TokenRepository tokenRepository ;
     @RequestMapping(value = "/get_income_type",method = RequestMethod.GET)
     public Map getChildsOfUser( ) {
         Map resspone= new HashMap();

@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,10 +31,12 @@ public class SolutionController {
     public static final int SUBCRIBE=2;
     public static final int UNLIKE=3;
     public static final int UNSUBCRIBE=4;
-    
-    private static SolutionRepository solutionRepository= new SolutionRepository();
-    private static TokenRepository tokenRepostirory= new TokenRepository();
-    private static ChildSolutionRepository childSolutionRepository= new ChildSolutionRepository();
+    @Autowired
+     SolutionRepository solutionRepository;
+    @Autowired
+     TokenRepository tokenRepostirory;
+    @Autowired
+     ChildSolutionRepository childSolutionRepository;
     @RequestMapping(value = "/get_recommended_solution",method=RequestMethod.GET)
     public Map getRecommededSolution(@RequestParam(name="token") String token,
                                      @RequestParam(name="c_id") String c_idStr){

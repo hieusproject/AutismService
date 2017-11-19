@@ -16,13 +16,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import DataUtil.PassWordUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import repository.TokenRepository;
 import repository.UserRepository;
 
 @RestController
 public class LoginController {
-   static UserRepository userRepository= new UserRepository();
-   static  TokenRepository tokenRepository= new TokenRepository();
+    @Autowired
+   UserRepository userRepository;
+    @Autowired
+    TokenRepository tokenRepository;
    
    
     @RequestMapping(value = "/login",method = RequestMethod.POST)

@@ -14,17 +14,18 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author AnNguyen
  */
-public class UserRepository implements RepositoryInterface{
-    private static Connection connection= Conector.getConnection();
+@Repository
+public class UserRepository implements RepositoryInterface{   
+    private  Connection connection=Conector.getConnection();
     
     public ArrayList<User> getNormalUser(){
     ArrayList<User> users=new ArrayList<User>();

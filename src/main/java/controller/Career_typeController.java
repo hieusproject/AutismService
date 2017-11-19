@@ -8,6 +8,7 @@ package controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,8 +21,10 @@ import repository.TokenRepository;
  */
 @RestController
 public class Career_typeController {
-    TokenRepository tokenRepository= new TokenRepository();
-    CareerTypeRepository careerTypeRepository= new CareerTypeRepository();
+    @Autowired
+    TokenRepository tokenRepository;
+    @Autowired
+    CareerTypeRepository careerTypeRepository;
     
     
     @RequestMapping (value = "/getcareer_type",method = RequestMethod.GET)

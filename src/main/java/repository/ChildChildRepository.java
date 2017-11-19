@@ -13,11 +13,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author VanHau
  */
+@Repository
+
 public class ChildChildRepository implements RepositoryInterface{
     private static Connection connection= Conector.getConnection();
      @Override

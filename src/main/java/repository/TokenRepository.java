@@ -13,11 +13,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author AnNguyen
  */
+@Repository
+
 public class TokenRepository implements RepositoryInterface{
     private static Connection connection= Conector.getConnection();
 
@@ -129,11 +132,13 @@ public class TokenRepository implements RepositoryInterface{
     return max_id; 
     
     }
-    public static void main(String[] args) {
-        System.out.println(new TokenRepository().getTokenByCode("62f67d43ced797b39b090dcd8ff61541cefeb3a5b841116a87ee7a6cd5326eaf").getU_id());
-    }
+   
 
     public boolean deleteByRow(int key, int reference) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    public static void main(String[] args) {
+        TokenRepository tokenRepository= new TokenRepository();
+        tokenRepository.getTokenByCode("5609b662ab5c429bb5147abf73d88a74f58bc44d23a0bf68fd72eac123537bae");
     }
 }

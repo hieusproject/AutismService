@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,11 +30,16 @@ import repository.UserRepository;
  */
 @RestController
 public class ExaminationController {
-   static TokenRepository tokenRepository= new TokenRepository();
-   static  ExaminationRepository examinationRepository= new ExaminationRepository();
-   static RuleRepository ruleRepository = new RuleRepository();
-   static UserRepository userRepository = new UserRepository();
-   static ChildRepository childRepository = new ChildRepository();
+    @Autowired
+    TokenRepository tokenRepository;
+    @Autowired
+    ExaminationRepository examinationRepository;
+    @Autowired
+    RuleRepository ruleRepository ;
+    @Autowired
+    UserRepository userRepository ;
+    @Autowired
+   ChildRepository childRepository;
     public ExaminationController() {
     }
     
@@ -129,7 +135,7 @@ public class ExaminationController {
     
     
     public static void main(String[] args) {
-        System.out.println(examinationRepository.getExamsOfChild(1).size());
+       
         
     }
 }

@@ -28,6 +28,7 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Context;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,9 +49,12 @@ import repository.TokenRepository;
  */
 @RestController
 public class ChildController {
-    private TokenRepository tokenRepository=new TokenRepository();
-    private  ChildRepository childRepository = new ChildRepository();
-    private ExtraInfoRepository extraInfoRepository= new ExtraInfoRepository();
+    @Autowired
+    private TokenRepository tokenRepository;
+    @Autowired
+    private  ChildRepository childRepository;
+    @Autowired
+    private ExtraInfoRepository extraInfoRepository;
     private static String resouce="";
     private static final  int NEW=1;
     private static final  int EDIT=2;

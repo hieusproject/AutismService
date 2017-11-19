@@ -14,11 +14,14 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author AnNguyen
  */
+@Repository
+
 public class Rule_detailRepository implements RepositoryInterface{
      private static Connection connection= Conector.getConnection();
      public ArrayList<Object> getAll() {

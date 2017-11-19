@@ -5,11 +5,12 @@
  */
 package controller;
 
-import static controller.ExaminationController.tokenRepository;
+
 import entity.Test;
 import entity.Token;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,10 +26,15 @@ import repository.TokenRepository;
  */
 @RestController
 public class DoTestController {
-    private static TokenRepository tokenRepository= new TokenRepository();
-    private static ExaminationRepository examinationRepository= new ExaminationRepository();
-    private static ChildRepository childRepository= new ChildRepository();
-    private static  TestRepository testRepository= new TestRepository();
+    @Autowired
+    TokenRepository tokenRepository;
+    @Autowired
+    ExaminationRepository examinationRepository;
+    @Autowired
+    ChildRepository childRepository;
+    @Autowired
+    TestRepository testRepository;
+   
     static final String ONE="1";
     static final String ONE_STAR="1*"; 
     static final int[] one_star_position={2,7,9,14,15};
