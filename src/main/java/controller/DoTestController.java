@@ -37,23 +37,56 @@ public class DoTestController {
    
     static final String ONE="1";
     static final String ONE_STAR="1*"; 
-    static final int[] one_star_position={2,7,9,14,15};
+    static final int CODO=1;
+    static final int MCHAT=2;
+    static final int CARS=3;
+
+    //Mchat
+    static final int[] one_star_position={2,7,9,14,15};// 
+    static final int[] no_is_one_position={11,18,20,22};
     // result=-1->error
-    public static int calculatingTest(String input,int test_type){
+    public static boolean isOneStarQuestion(int i){
+        for (int j = 0; j < one_star_position.length; j++) {
+            int k = one_star_position[j];
+            if (k==i) {
+                return true;
+            }
+        }
+        return false;
+    }
+    private static boolean is_No_is_One_Position(int index){
+        for (int j = 0; j < no_is_one_position.length; j++) {
+            int item = no_is_one_position[j];
+            if (item==index) {
+                return true;
+            }
+        }
+        return false;
+    }
+    private static String[] normalizeMchatResult(String []intputs){
+        for (int i = 0; i < intputs.length; i++) {
+            if (is_No_is_One_Position(i+1)) {
+                intputs[i]="1";
+            }        
+        }
+       return intputs; 
+    }
+    private static int calculatingTest(String input,int test_type){
         int result=0;
         
         String [] inputs= input.trim().split(" ");
         int num_of_one=0,num_of_one_Star=0;
         double sum=0;
         double onestart_sum=0;
-        if (test_type==1) {
+        if (test_type==CODO) {
             sum=getSum(inputs);
             if (sum>0) {
                 result=1;
             }
             else{ result=0;}
         }
-        if (test_type==2) {
+        if (test_type==MCHAT) {
+            inputs=normalizeMchatResult(inputs);
             sum=getSum(inputs);
             onestart_sum=getSumOneStar(inputs);
             sum=sum-onestart_sum;
@@ -70,7 +103,7 @@ public class DoTestController {
             }
             
         }
-        if (test_type==3) {
+        if (test_type==CARS) {
              sum= getSum(inputs);
             if (sum>=15&&sum<=29.5) {
                 result=0;
@@ -86,16 +119,6 @@ public class DoTestController {
         
         return result;
     }
-    public static int  getNumsOfLetter(String [] intputs,String letter){
-        int sum=0;
-            for (int i = 0; i < intputs.length; i++) {
-                String intput = intputs[i];
-                if (intput.equals(letter)) {
-                    sum++;
-                }
-            }
-        return sum;
-    }
     
     public static double  getSum(String [] intputs){
     double sum=0;
@@ -110,15 +133,8 @@ public class DoTestController {
         }
     return sum;
     }
-    public static boolean isOneStarQuestion(int i){
-        for (int j = 0; j < one_star_position.length; j++) {
-            int k = one_star_position[j];
-            if (k==i) {
-                return true;
-            }
-        }
-        return false;
-    }
+    
+    
     public  static double  getSumOneStar(String [] intputs){
     double sum=0;
         for (int i = 0; i < intputs.length; i++) {
