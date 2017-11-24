@@ -35,8 +35,7 @@ public class DoTestController {
     @Autowired
     TestRepository testRepository;
    
-    static final String ONE="1";
-    static final String ONE_STAR="1*"; 
+    
     static final int CODO=1;
     static final int MCHAT=2;
     static final int CARS=3;
@@ -66,7 +65,11 @@ public class DoTestController {
     private static String[] normalizeMchatResult(String []intputs){
         for (int i = 0; i < intputs.length; i++) {
             if (is_No_is_One_Position(i+1)) {
-                intputs[i]="1";
+                if (intputs[i].equals("0")) {
+                    intputs[i]="1";
+                } else {
+                     intputs[i]="0";
+                }
             }        
         }
        return intputs; 
