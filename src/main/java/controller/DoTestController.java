@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import repository.ChildRepository;
+import repository.ClusterRepository;
 import repository.ExaminationRepository;
+import repository.ExtraInfoRepository;
 import repository.TestRepository;
 import repository.TokenRepository;
 
@@ -34,7 +36,11 @@ public class DoTestController {
     ChildRepository childRepository;
     @Autowired
     TestRepository testRepository;
-   
+    @Autowired
+    ClusterRepository clusterRepository;
+    @Autowired
+    ExtraInfoRepository extraInfoRepository;
+    
     
     static final int CODO=1;
     static final int MCHAT=2;
@@ -197,6 +203,9 @@ public class DoTestController {
                 //get  value from database success
                 if (level_of_type_id!=-1&&highest_level!=-1) {
                      if (level_of_type_id==highest_level) {
+                         //grouping
+                        int predicted_group_id= clusterRepository.predicting_Group(answers);
+                        extraInfoRepository.set_group(predicted_group_id, c_id);
                         examinationRepository.updateExamResult(ex_id, "1");
                         response.put("exam_result", 1);
                     }else{

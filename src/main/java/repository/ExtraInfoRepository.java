@@ -111,6 +111,31 @@ public class ExtraInfoRepository implements RepositoryInterface{
        }
     return false;      
     }
+    public boolean set_group(int groupId,int c_id) {
+       try {  
+         //`father_career_id`,`divorce_status`,"
+                  //   + "`mother_career_id`,`monthly_income`,`height`,`weight`,`sex`,group
+           String sqlString= "UPDATE `extra_info` SET `group`=?"
+                   + " WHERE `c_id`=?";
+           PreparedStatement updateStatement=connection.prepareStatement(sqlString);
+           updateStatement.setInt(1, groupId);
+           updateStatement.setInt(2, c_id);
+           int result=updateStatement.executeUpdate();
+          
+           if (result==0) {
+             System.out.println("update failed");
+             return false;
+               
+             
+         } else {
+              return true; 
+         }
+       } catch (Exception e) {
+          
+           e.printStackTrace();
+       }
+    return false;      
+    }
 
     @Override
     public boolean deleteById(String id) {
