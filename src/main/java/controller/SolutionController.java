@@ -132,7 +132,7 @@ public class SolutionController {
         else{
             respone.put("status","1");
             Date date_created = new Date();
-            Solution solution = new Solution(0, c_id, title, content, title, DataUtil.DataUtil.toSQLDATE(date_created),0);
+            Solution solution = new Solution(0,tokenOb.getU_id(), title, content,"none", DataUtil.DataUtil.toSQLDATE(date_created),0);
             int s_id=solutionRepository.saveAndReturnID(solution);
             solution.setS_id(s_id);
             ChildSolution childSolution = new ChildSolution(s_id, c_id, rating);

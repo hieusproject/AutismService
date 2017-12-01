@@ -160,10 +160,10 @@ public class SolutionRepository implements  RepositoryInterface{
             String getId="SELECT MAX(solution.s_id) id FROM `solution`";
             PreparedStatement getIdPreparedStatement= connection.prepareStatement(getId);
             ResultSet rs= getIdPreparedStatement.executeQuery();
-            while (rs.next()) {                
-                result=rs.getInt("id");
-                break;
-            }
+                while (rs.next()) {                
+                    result=rs.getInt("id");
+                    break;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
