@@ -35,10 +35,7 @@ public class LoginController {
          User user=userRepository.getUserByInput(username, password);
          if (user!=null) {
             //new token,save token
-            String newCode= 
-                    Integer.toString(tokenRepository.getMaxId())
-                    +DataUtil.generatingRandomCode();
-            newCode= Integer.toString(user.getU_id())+PassWordUtil.hashPassword(newCode);
+            String newCode=  DataUtil.newTokenforUser(user.getU_id());
             Token tk= new Token(0,user.getU_id(), newCode);
             tokenRepository.save(tk);
             respone.put("status","1");

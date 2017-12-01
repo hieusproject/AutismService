@@ -70,7 +70,7 @@ public class DataUtil {
          String newCode= Integer.toString(u_id)+
                     Integer.toString(tokenRepository.getMaxId())
                     +DataUtil.generatingRandomCode();
-            newCode= PassWordUtil.hashPassword(newCode);
+            newCode= Integer.toString(u_id)+PassWordUtil.hashPassword(newCode);
     return newCode;
     }
     
