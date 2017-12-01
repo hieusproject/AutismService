@@ -97,17 +97,11 @@ public class DoTestController {
             inputs=normalizeMchatResult(inputs);
             sum=getSum(inputs);
             onestart_sum=getSumOneStar(inputs);
-            sum=sum-onestart_sum;
-            if (sum>=3) {
+            if (sum>=3||onestart_sum>=2) {
                 result=1;
             }
             else{
-                if (onestart_sum==2) {
-                    result=1;
-                }
-                if (onestart_sum<2) {
-                    result=0;
-                }
+                result=0;
             }
             
         }
@@ -116,11 +110,14 @@ public class DoTestController {
             if (sum>=15&&sum<=29.5) {
                 result=0;
             }
-            if (sum>=30&&sum<=36.5) {
+            else{
+                if (sum>=30&&sum<=36.5) {
                 result=1;
             }
-              if (sum>=37&&sum<=60) {
+               if (sum>=37&&sum<=60) {
                 result=2;
+            }
+            
             }
             
         }
