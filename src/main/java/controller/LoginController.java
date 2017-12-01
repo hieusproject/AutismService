@@ -35,10 +35,10 @@ public class LoginController {
          User user=userRepository.getUserByInput(username, password);
          if (user!=null) {
             //new token,save token
-            String newCode= Integer.toString(user.getU_id())+
+            String newCode= 
                     Integer.toString(tokenRepository.getMaxId())
                     +DataUtil.generatingRandomCode();
-            newCode= PassWordUtil.hashPassword(newCode);
+            newCode= Integer.toString(user.getU_id())+PassWordUtil.hashPassword(newCode);
             Token tk= new Token(0,user.getU_id(), newCode);
             tokenRepository.save(tk);
             respone.put("status","1");
@@ -69,6 +69,21 @@ public class LoginController {
             respone.put("token",tk.getToken_code());
             user.setPassword("*******");
             respone.put("user", user);
+        }
+         
+    return respone;
+    } @RequestMapping(value="/logout",method= RequestMethod.GET)
+    public Map log_out(@RequestParam(name="token") String token){
+        Map respone= new HashMap();
+        Token tk= tokenRepository.getTokenByCode(token);
+     
+       
+        if (tk==null) {
+           respone.put("status","0");
+           respone.put("token","");
+        } else {
+             tokenRepository.deleteById(Integer.toString(tk.getToken_id()));
+             respone.put("status","1");
         }
          
     return respone;

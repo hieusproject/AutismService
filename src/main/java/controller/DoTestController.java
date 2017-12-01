@@ -83,8 +83,7 @@ public class DoTestController {
     private static int calculatingTest(String input,int test_type){
         int result=0;
         
-        String [] inputs= input.trim().split(" ");
-        int num_of_one=0,num_of_one_Star=0;
+        String [] inputs= input.trim().split(" ");      
         double sum=0;
         double onestart_sum=0;
         if (test_type==CODO) {
@@ -117,7 +116,7 @@ public class DoTestController {
             if (sum>=15&&sum<=29.5) {
                 result=0;
             }
-             if (sum>=30&&sum<=36.5) {
+            if (sum>=30&&sum<=36.5) {
                 result=1;
             }
               if (sum>=37&&sum<=60) {

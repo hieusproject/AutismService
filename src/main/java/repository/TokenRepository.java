@@ -74,7 +74,24 @@ public class TokenRepository implements RepositoryInterface{
     }
 
     public boolean deleteById(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {  
+         //`fINSERT INTO `token`(`u_id`, `token`) VALUES (?,?)";
+           String sqlString= "DELETE FROM `token` WHERE token.tk_id=?";
+           PreparedStatement delStatement= connection.prepareStatement(sqlString);
+           delStatement.setInt(1,Integer.parseInt(id));
+          
+           int result=delStatement.executeUpdate();
+          
+           if (result==0) {
+             return false;    
+             
+         } else {
+              return true; 
+         }
+       } catch (Exception e) {
+           e.printStackTrace();
+            return false;    
+       }    
     }
 
      @Override
